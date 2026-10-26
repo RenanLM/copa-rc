@@ -1,0 +1,49 @@
+/*
+ * Quatro estados, quatro aparências DIFERENTES (forma, borda e ícone, não só cor):
+ *  - garantida: preenchida e sólida;
+ *  - condicional: tracejada;
+ *  - só com empate: pontilhada;
+ *  - impossível: apagada.
+ */
+
+.guaranteed {
+  --st-bg: var(--accent);
+  --st-fg: var(--accent-ink);
+  --st-border: var(--accent);
+  --st-border-style: solid;
+}
+
+.possible {
+  --st-bg: var(--data-soft);
+  --st-fg: var(--data);
+  --st-border: var(--data);
+  --st-border-style: dashed;
+}
+
+.tieOnly {
+  --st-bg: var(--alert-soft);
+  --st-fg: var(--alert);
+  --st-border: var(--alert);
+  --st-border-style: dotted;
+}
+
+.impossible {
+  --st-bg: transparent;
+  --st-fg: var(--text-3);
+  --st-border: var(--border-strong);
+  --st-border-style: solid;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  border: 1.5px var(--st-border-style) var(--st-border);
+  background: var(--st-bg);
+  color: var(--st-fg);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  white-space: nowrap;
+}

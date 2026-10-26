@@ -1,0 +1,107 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+.grid {
+  display: grid;
+  gap: 4px;
+}
+
+.corner {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 1px;
+  color: var(--text-2);
+  font-size: 0.5625rem;
+  font-weight: 700;
+  line-height: 1.15;
+  white-space: nowrap;
+}
+
+.colHead,
+.rowHead {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-2);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.rowHead {
+  justify-content: center;
+  color: var(--text);
+  font-family: var(--font-display);
+  font-size: 1.125rem;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.colHead {
+  min-height: 28px;
+}
+
+.cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  min-height: 46px;
+  padding: 3px 0;
+  border-radius: 10px;
+  border: 1.5px var(--st-border-style) var(--st-border);
+  background: var(--st-bg);
+  color: var(--st-fg);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    transform var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out);
+}
+
+.cell:hover {
+  transform: translateY(-1px);
+}
+
+.cell:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: 2px;
+}
+
+.chosen {
+  box-shadow:
+    0 0 0 2px var(--surface),
+    0 0 0 4px var(--text);
+}
+
+.points {
+  font-variant-numeric: tabular-nums;
+}
+
+.axisNote {
+  color: var(--text-2);
+  font-size: var(--fs-sm);
+}
+
+.pickers {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+.pickerLabel {
+  margin-bottom: 4px;
+  color: var(--text-2);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}

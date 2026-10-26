@@ -1,0 +1,57 @@
+.app {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 480px;
+  height: 100dvh;
+  margin: 0 auto;
+  background: var(--bg);
+  overflow: hidden;
+}
+
+/* Em telas largas, o aplicativo aparece como um aparelho centralizado. */
+@media (min-width: 520px) {
+  .app {
+    height: min(100dvh - 32px, 900px);
+    margin: 16px auto;
+    border: 1px solid var(--border);
+    border-radius: 28px;
+    box-shadow: 0 24px 80px rgb(0 0 0 / 0.5);
+  }
+}
+
+.skip {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 20;
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-weight: 700;
+  font-size: var(--fs-sm);
+  transform: translateY(-200%);
+}
+
+.skip:focus {
+  transform: none;
+}
+
+.content {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: var(--sp-4) var(--sp-4) var(--sp-8);
+  outline: none;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-strong) transparent;
+}
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}

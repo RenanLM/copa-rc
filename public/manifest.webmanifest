@@ -1,0 +1,14 @@
+{
+  "name": "RC Championship",
+  "short_name": "RC Championship",
+  "description": "Acompanhamento do campeonato de corridas de carros por controle remoto.",
+  "lang": "pt-BR",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0B0F14",
+  "theme_color": "#0B0F14",
+  "icons": [
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}

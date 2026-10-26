@@ -1,0 +1,23 @@
+.delta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 2px;
+  min-width: 34px;
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  color: var(--text-3);
+}
+
+.up {
+  color: var(--gain);
+}
+
+.down {
+  color: var(--alert);
+}
+
+.inline {
+  min-width: 0;
+  justify-content: flex-start;
+}

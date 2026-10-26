@@ -1,0 +1,24 @@
+.plate {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  min-width: 36px;
+  height: 30px;
+  padding: 0 6px;
+  border-radius: 8px;
+  border: 1.5px solid var(--team);
+  background: color-mix(in srgb, var(--team) 20%, var(--surface-sunken));
+  color: var(--text);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.125rem;
+  line-height: 1;
+}
+
+.large {
+  min-width: 52px;
+  height: 44px;
+  border-radius: 12px;
+  font-size: 1.75rem;
+}

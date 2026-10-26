@@ -1,0 +1,73 @@
+/*
+ * Design tokens — identidade visual RC Championship.
+ * Inspiração: dashboards de telemetria e transmissões de automobilismo.
+ * Todas as telas consomem estes tokens; nenhuma cor é escrita direto em componente.
+ */
+:root {
+  /* Superfícies */
+  --bg: #0b0f14;
+  --surface: #171d26; /* cards */
+  --surface-raised: #1e2631;
+  --surface-sunken: #11161d;
+  --border: #2b3441;
+  --border-strong: #3a4556;
+
+  /* Texto */
+  --text: #f5f7fa;
+  --text-2: #9ca8b8; /* secundário */
+  --text-3: #7d8a9b; /* terciário: só para metadados de baixa importância */
+
+  /* Semânticas */
+  --accent: #e8ff57; /* destaque principal */
+  --accent-ink: #0b0f14; /* texto sobre destaque */
+  --accent-soft: rgb(232 255 87 / 0.12);
+  --data: #43c6e8; /* dados e telemetria */
+  --data-soft: rgb(67 198 232 / 0.14);
+  --alert: #ff704d;
+  --alert-soft: rgb(255 112 77 / 0.14);
+  --gain: #6ee7a0; /* subiu posições */
+
+  /* Tipografia */
+  --font-display: 'Barlow Condensed', 'Arial Narrow', system-ui, sans-serif;
+  --font-body: 'Inter Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --fs-xs: 0.6875rem; /* 11 */
+  --fs-sm: 0.8125rem; /* 13 */
+  --fs-md: 0.9375rem; /* 15 */
+  --fs-lg: 1.125rem; /* 18 */
+  --fs-xl: 1.5rem; /* 24 */
+  --fs-2xl: 2rem; /* 32 */
+  --fs-hero: 4.25rem; /* 68 */
+
+  /* Espaçamento (base 4px) */
+  --sp-1: 0.25rem;
+  --sp-2: 0.5rem;
+  --sp-3: 0.75rem;
+  --sp-4: 1rem;
+  --sp-5: 1.25rem;
+  --sp-6: 1.5rem;
+  --sp-8: 2rem;
+
+  --radius-sm: 8px;
+  --radius: 14px;
+  --radius-lg: 20px;
+
+  --touch: 44px; /* alvo de toque mínimo */
+
+  /* Movimento */
+  --dur-fast: 140ms;
+  --dur: 240ms;
+  --dur-slow: 420ms;
+  --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
+
+  --nav-height: 68px;
+  --topbar-height: 56px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-fast: 0.01ms;
+    --dur: 0.01ms;
+    --dur-slow: 0.01ms;
+  }
+}

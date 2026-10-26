@@ -1,0 +1,74 @@
+.intro {
+  margin-bottom: var(--sp-4);
+  color: var(--text-2);
+  font-size: var(--fs-sm);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  width: 100%;
+  min-height: 72px;
+  padding: var(--sp-3) var(--sp-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface-raised);
+  color: var(--text);
+  text-align: left;
+  transition: border-color var(--dur-fast) var(--ease-out);
+}
+
+.option:hover {
+  border-color: var(--border-strong);
+}
+
+.current {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.avatar {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--surface-sunken);
+  border: 1px solid var(--border-strong);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.125rem;
+}
+
+.current .avatar {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+}
+
+.info {
+  flex: 1;
+  min-width: 0;
+}
+
+.name {
+  font-weight: 700;
+}
+
+.role {
+  margin-top: 1px;
+  color: var(--text-2);
+  font-size: var(--fs-sm);
+}
+
+.check {
+  color: var(--accent);
+}

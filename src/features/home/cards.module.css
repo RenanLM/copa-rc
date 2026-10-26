@@ -1,0 +1,244 @@
+/* Estilos compartilhados pelos cartões do painel do piloto. */
+
+.kicker {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  margin-bottom: var(--sp-3);
+}
+
+.kickerTitle {
+  color: var(--text-2);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.moreLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  min-height: var(--touch);
+  margin: -12px 0;
+  color: var(--accent);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+}
+
+.heading {
+  font-family: var(--font-display);
+  font-size: var(--fs-xl);
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.meta {
+  margin-top: 2px;
+  color: var(--text-2);
+  font-size: var(--fs-sm);
+}
+
+/* Última etapa */
+.lastResult {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-3);
+  margin: var(--sp-3) 0;
+}
+
+.lastPosition {
+  font-family: var(--font-display);
+  font-size: 3.25rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.lastPoints {
+  color: var(--accent);
+  font-family: var(--font-display);
+  font-size: var(--fs-xl);
+  font-weight: 700;
+}
+
+.facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2) var(--sp-4);
+  color: var(--text-2);
+  font-size: var(--fs-sm);
+}
+
+.facts strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.cta {
+  margin-top: var(--sp-4);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  margin-top: var(--sp-4);
+}
+
+.tiles {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-3);
+}
+
+/* Próxima corrida */
+.nextInfo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  margin-top: var(--sp-3);
+  color: var(--text-2);
+  font-size: var(--fs-sm);
+}
+
+.nextInfo p {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+/* Baterias */
+.heats {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+.heat {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 6px var(--sp-3);
+  align-items: center;
+}
+
+.heatName {
+  font-weight: 600;
+}
+
+.heatStats {
+  color: var(--text-2);
+  font-size: var(--fs-sm);
+  text-align: right;
+}
+
+.heatStats strong {
+  color: var(--data);
+  font-weight: 700;
+}
+
+.track {
+  grid-column: 1 / -1;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--border);
+  overflow: hidden;
+}
+
+.bar {
+  display: block;
+  height: 100%;
+  border-radius: 3px;
+  background: var(--data);
+  transform-origin: left;
+}
+
+.note {
+  margin-top: var(--sp-3);
+  color: var(--text-3);
+  font-size: var(--fs-xs);
+}
+
+/* Evolução */
+.evolution {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: var(--sp-2);
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.colLabel {
+  color: var(--text-2);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.barArea {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  width: 100%;
+  height: 84px;
+  border-bottom: 1px solid var(--border);
+}
+
+.colBar {
+  width: 70%;
+  max-width: 44px;
+  border-radius: 6px 6px 0 0;
+  background: var(--accent);
+  transform-origin: bottom;
+}
+
+.colBarFuture {
+  width: 70%;
+  max-width: 44px;
+  height: 100%;
+  border: 1px dashed var(--border-strong);
+  border-bottom: 0;
+  border-radius: 6px 6px 0 0;
+}
+
+.colPoints {
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  font-weight: 700;
+  line-height: 1;
+}
+
+.colMuted {
+  color: var(--text-3);
+}
+
+.colSub {
+  color: var(--text-2);
+  font-size: var(--fs-xs);
+  line-height: 1.2;
+  text-align: center;
+}
+
+.rowLabel {
+  margin: var(--sp-3) 0 0;
+  padding-top: var(--sp-3);
+  border-top: 1px solid var(--border);
+  color: var(--text-2);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.champPos {
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  font-weight: 600;
+  color: var(--data);
+}

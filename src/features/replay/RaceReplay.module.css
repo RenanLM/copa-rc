@@ -1,0 +1,30 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+
+.meta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.note {
+  color: var(--text-2);
+  font-size: var(--fs-sm);
+}
+
+.sectionTitle {
+  margin-bottom: var(--sp-3);
+  color: var(--text-2);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.footnote {
+  color: var(--text-3);
+  font-size: var(--fs-xs);
+}

@@ -1,0 +1,42 @@
+.header {
+  margin-bottom: var(--sp-4);
+}
+
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  min-height: var(--touch);
+  margin: 0 0 0 -6px;
+  padding: 0 var(--sp-2) 0 0;
+  color: var(--text-2);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+}
+
+.back:hover {
+  color: var(--text);
+}
+
+.eyebrow {
+  margin-bottom: 2px;
+  color: var(--data);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: var(--fs-2xl);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: 0.005em;
+}
+
+.subtitle {
+  margin-top: var(--sp-1);
+  color: var(--text-2);
+  font-size: var(--fs-sm);
+}
