@@ -8,9 +8,15 @@ const ready = { timeout: 3000 };
 beforeEach(() => {
   setPendingSimulation('none');
   localStorage.clear();
+  const favicon = document.createElement('link');
+  favicon.rel = 'icon';
+  document.head.append(favicon);
 });
 
-afterEach(() => cleanup());
+afterEach(() => {
+  cleanup();
+  document.querySelector('link[rel="icon"]')?.remove();
+});
 
 function open(hash: string) {
   window.location.hash = hash;
@@ -29,6 +35,15 @@ describe('aplicativo (interface)', () => {
   it('mostra a navegação do piloto e navega para a classificação com destaque', async () => {
     open('#/piloto');
     await screen.findByRole('region', { name: /Resumo de Lucas Ferreira/ }, ready);
+
+    expect(document.documentElement).toHaveAttribute('data-theme', 'light');
+    fireEvent.click(screen.getByRole('button', { name: 'Ativar modo escuro' }));
+    expect(document.documentElement).toHaveAttribute('data-theme', 'dark');
+    expect(localStorage.getItem('rc-championship-theme')).toBe('dark');
+    expect(document.querySelector('link[rel="icon"]')).toHaveAttribute('href', '/favicon-dark.svg');
+    fireEvent.click(screen.getByRole('button', { name: 'Ativar modo claro' }));
+    expect(document.documentElement).toHaveAttribute('data-theme', 'light');
+    expect(document.querySelector('link[rel="icon"]')).toHaveAttribute('href', '/favicon.svg');
 
     const nav = screen.getByRole('navigation', { name: 'Navegação principal' });
     for (const label of ['Início', 'Corridas', 'Classificação', 'Simulador', 'Perfil']) {
@@ -52,6 +67,8 @@ describe('aplicativo (interface)', () => {
     }
     expect(screen.getByText('Lucas Ferreira')).toBeInTheDocument();
     expect(screen.queryByText(/· você/)).not.toBeInTheDocument();
+    fireEvent.click(within(nav).getByRole('link', { name: 'Ao Vivo' }));
+    expect(within(nav).getByRole('link', { name: 'Ao Vivo' })).toHaveAttribute('aria-current', 'page');
   });
 
   it('exibe o resultado da etapa 3 e detalha as voltas ao tocar em um piloto', async () => {

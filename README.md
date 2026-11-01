@@ -31,6 +31,7 @@ Abra no celular (mesma rede, endereço "Network" exibido pelo Vite) ou use o mod
 | `/?sim=slow#/piloto` | Simula carregamento lento (estado de carregamento) |
 
 O seletor de perfil fica no canto superior direito. Não há autenticação.
+O tema claro é o padrão para facilitar a leitura ao ar livre; use o botão de sol/lua na barra superior para alternar entre os temas. A escolha fica salva neste dispositivo.
 
 ## Scripts
 
