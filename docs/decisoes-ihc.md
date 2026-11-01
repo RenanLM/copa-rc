@@ -26,6 +26,16 @@ Documento vivo: cada fase acrescenta as decisões relevantes. Siglas: **B&S** = 
 | Dark mode, tipografia condensada para números e títulos (Barlow Condensed) e corpo em Inter, com números tabulares para tempos e pontos. | Tokens | N8; B&S Compatibilidade (referência a transmissões esportivas) |
 | Áreas ainda não liberadas aparecem como "Em breve — Em desenvolvimento", com descrição do que farão. | Navegação | N1; N2 |
 
+## Fase 4 — Telemetria rápida do Lucas
+
+| Decisão | Onde | Critério |
+| --- | --- | --- |
+| A última bateria registrada fica no topo do painel do piloto e também aparece no detalhe da etapa, com número de voltas, melhor volta e ritmo médio. | Início, Corridas | B&S Carga de trabalho; N1 Visibilidade do estado; N6 Reconhecimento |
+| A telemetria detalhada e a comparação da melhor volta com o líder da bateria ficam em um painel inferior, acessível por um botão explícito. | Início, Corridas | B&S Condução; N7 Flexibilidade e eficiência; divulgação progressiva |
+| As voltas podem ser trocadas no painel sem filtros avançados ou ações destrutivas; todos os controles novos têm área de toque de pelo menos 44 px. | Telemetria | B&S Gestão de erros; B&S Adaptabilidade |
+| A melhor volta da bateria usa verde e o ritmo médio usa amarelo com texto escuro; a cor é acompanhada por rótulos textuais. | Telemetria | B&S Significado dos códigos; N1 |
+| Não se exibe carga física ou alerta de bateria crítica: os dados atuais só registram voltas, não tensão nem percentual de carga. | Telemetria | N2 Correspondência com o mundo real; honestidade da informação |
+
 ## Fase 2 — Replay e desempenho
 
 | Decisão | Onde | Critério |
