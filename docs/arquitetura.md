@@ -160,6 +160,12 @@ Componentes não conhecem personas. A tela de classificação recebe o piloto em
 | 1 | Identidade, navegação, painel de Lucas, resultados da etapa 3, classificação | **Concluída** |
 | 2 | Race Replay, gráficos animados, baterias, comparativo entre etapas | **Concluída** |
 | 3 | Race Predictor (simulador) | **Concluída** |
-| 4 | Experiência de Mariana: início, ao vivo, resultado e pódio, feed, pilotos e equipes | Pendente |
+| 4 | Experiência de Mariana: guia, placar demonstrativo, classificação, feed e diretório | **Interface concluída com dados demonstrativos**; telemetria e publicações reais pendentes |
 | 5 | Probabilidades de título (cálculo determinístico, depois Monte Carlo se justificável) | Pendente |
 | 6 | Missões de usabilidade, acessibilidade, desempenho | Pendente |
+
+### Experiência da espectadora
+
+As telas de Mariana priorizam leitura rápida e reconhecimento visual na arquibancada. O início reúne o contexto da etapa, acessos diretos ao placar, classificação, feed e participantes. A aba "Ao Vivo" simula a etapa 4 em loop, com carros se movendo no traçado, placar que reordena nas ultrapassagens e estado "AO VIVO · SIMULADO". O feed e o diretório são navegáveis e filtráveis, e o conteúdo é identificado como demonstrativo.
+
+O conjunto atual não contém posição real dos carros, publicações nem fotografias fornecidas pelas equipes. A corrida ao vivo é uma simulação acadêmica determinística, independente dos resultados oficiais; não deve ser interpretada como telemetria. As ilustrações do feed também são rotuladas como demonstrativas. Para concluir a experiência real do cenário do PDF, falta integrar uma fonte autorizada de cronometragem e publicações/imagens das equipes, com estado de atualização e tratamento de perda de sinal.

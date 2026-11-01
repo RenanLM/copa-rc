@@ -1,0 +1,85 @@
+.artwork {
+  position: relative;
+  display: grid;
+  min-height: 168px;
+  overflow: hidden;
+  place-items: center;
+  background:
+    radial-gradient(ellipse at 68% 30%, color-mix(in srgb, var(--team) 30%, transparent), transparent 46%),
+    linear-gradient(140deg, var(--surface-raised), var(--surface-sunken));
+}
+
+.artwork svg {
+  display: block;
+  width: 100%;
+  max-height: 180px;
+}
+
+.trackOuter,
+.trackInner,
+.trackLine {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.trackOuter {
+  stroke: color-mix(in srgb, var(--text-3) 26%, transparent);
+  stroke-width: 39;
+}
+
+.trackInner {
+  stroke: var(--surface);
+  stroke-width: 33;
+}
+
+.trackLine {
+  stroke: var(--border-strong);
+  stroke-width: 1.5;
+  stroke-dasharray: 5 7;
+}
+
+.car > rect:first-child,
+.car > path {
+  fill: var(--team);
+}
+
+.car .window {
+  fill: var(--surface);
+  opacity: 0.88;
+}
+
+.car .wheel {
+  fill: var(--text);
+  stroke: var(--surface);
+  stroke-width: 2;
+}
+
+.car text {
+  fill: var(--accent-ink);
+  font-family: var(--font-body);
+  font-size: 7px;
+  font-weight: 800;
+}
+
+.artLabel {
+  position: absolute;
+  right: var(--sp-2);
+  bottom: var(--sp-2);
+  padding: 3px 7px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--text-2);
+  font-size: 0.625rem;
+  font-weight: 700;
+}
+
+.compact {
+  min-height: 112px;
+  border-radius: var(--radius-sm);
+}
+
+.compact svg {
+  max-height: 120px;
+}

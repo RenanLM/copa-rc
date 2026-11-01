@@ -1,0 +1,186 @@
+.hero {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  border-color: color-mix(in srgb, var(--data) 45%, var(--border));
+}
+
+.heroHeading,
+.leadersHeading {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+}
+
+.heroHeading h2,
+.leadersHeading h2,
+.sectionHeading h2 {
+  font-size: var(--fs-lg);
+  line-height: 1.2;
+}
+
+.heroIcon,
+.feedMark,
+.peopleMark {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: var(--data-soft);
+  color: var(--data);
+}
+
+.eyebrow {
+  margin-bottom: 3px;
+  color: var(--text-2);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.raceMeta {
+  color: var(--text-2);
+  font-size: var(--fs-sm);
+}
+
+.honesty,
+.helper,
+.empty {
+  color: var(--text-2);
+  font-size: var(--fs-sm);
+}
+
+.primaryLink,
+.textLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  width: fit-content;
+  min-height: var(--touch);
+  font-weight: 700;
+}
+
+.primaryLink {
+  align-self: stretch;
+  padding: 0 var(--sp-4);
+  border-radius: 999px;
+  background: var(--nav-active);
+  color: #fff;
+}
+
+:global(:root[data-theme='dark']) .primaryLink {
+  color: var(--accent-ink);
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+.sectionHeading {
+  padding-inline: 2px;
+}
+
+.quickLinks {
+  display: grid;
+  gap: var(--sp-2);
+}
+
+.quickLink {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr) 18px;
+  align-items: center;
+  gap: var(--sp-3);
+  min-height: 68px;
+  padding: var(--sp-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.quickLink > svg:first-child {
+  color: var(--nav-active);
+}
+
+.quickLink > svg:last-child {
+  color: var(--text-2);
+}
+
+.quickLink span:nth-child(2) {
+  display: grid;
+  gap: 2px;
+}
+
+.quickLink small {
+  color: var(--text-2);
+  font-size: var(--fs-xs);
+}
+
+.feedMark,
+.peopleMark {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  font-weight: 800;
+}
+
+.leadersCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+.leadersHeading > svg {
+  color: var(--nav-active);
+}
+
+.leaders {
+  display: grid;
+  gap: var(--sp-2);
+}
+
+.leaderRow {
+  display: grid;
+  grid-template-columns: 30px 10px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--sp-2);
+  min-height: 42px;
+  border-bottom: 1px solid var(--border);
+}
+
+.rank {
+  color: var(--text-2);
+  font-weight: 700;
+}
+
+.teamDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.teamName {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.leaderRow strong {
+  white-space: nowrap;
+}
+
+.textLink {
+  color: var(--nav-active);
+  font-size: var(--fs-sm);
+}
+
+@media (min-width: 420px) {
+  .primaryLink {
+    align-self: flex-start;
+  }
+}
