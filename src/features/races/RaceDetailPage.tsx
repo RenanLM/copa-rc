@@ -12,6 +12,7 @@ import { SegmentedControl } from '@/components/ui/SegmentedControl';
 import { EmptyState } from '@/components/ui/StateViews';
 import { raceFastestLap, totalTimeOf } from '@/domain';
 import { daysBetween, formatCountdown, formatLapTime, formatLongDate } from '@/lib/format';
+import { PilotHeatTelemetry } from '@/features/performance/PilotHeatTelemetry';
 import { HeatTable } from './HeatTable';
 import { RaceResultList } from './RaceResultList';
 import styles from './RaceDetailPage.module.css';
@@ -67,6 +68,10 @@ export function RaceDetailPage() {
           <Repeat size={12} aria-hidden="true" /> {race.finalLaps} voltas
         </Badge>
       </div>
+
+      {profile.persona.pilotId && (
+        <PilotHeatTelemetry model={model} pilotId={profile.persona.pilotId} raceId={race.id} />
+      )}
 
       {!finished && (
         <Card>

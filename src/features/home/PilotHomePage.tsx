@@ -7,8 +7,8 @@ import { StatTile } from '@/components/ui/StatTile';
 import { EmptyState } from '@/components/ui/StateViews';
 import { getPilotSeasonSummary, maxPointsPerRace } from '@/domain';
 import { formatLapTime } from '@/lib/format';
+import { PilotHeatTelemetry } from '@/features/performance/PilotHeatTelemetry';
 import { EvolutionCard } from './EvolutionCard';
-import { HeatsCard } from './HeatsCard';
 import { HeroCard } from './HeroCard';
 import { LastRaceCard } from './LastRaceCard';
 import { NextRaceCard } from './NextRaceCard';
@@ -26,7 +26,7 @@ export function PilotHomePage() {
     [championship, pilotId],
   );
 
-  if (!summary) {
+  if (!pilotId || !summary) {
     return (
       <EmptyState
         heading="h1"
@@ -43,6 +43,7 @@ export function PilotHomePage() {
 
   return (
     <>
+      <PilotHeatTelemetry model={model} pilotId={pilotId} />
       <HeroCard summary={summary} pilotNameOf={pilotNameOf} />
 
       {summary.lastRace && (
@@ -88,10 +89,6 @@ export function PilotHomePage() {
           referenceDate={championship.referenceDate}
           calendarPath={profilePath(profile, 'corridas')}
         />
-      )}
-
-      {summary.lastRace && (
-        <HeatsCard round={summary.lastRace.race.round} heats={summary.lastRaceHeats} />
       )}
 
       <EvolutionCard

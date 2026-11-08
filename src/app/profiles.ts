@@ -77,7 +77,7 @@ export const PROFILES: readonly ProfileDefinition[] = [
       { id: 'live', label: 'Ao Vivo', path: 'ao-vivo', icon: Radio },
       { id: 'standings', label: 'Classificação', path: 'classificacao', icon: Trophy },
       { id: 'feed', label: 'Feed', path: 'feed', icon: Newspaper },
-      { id: 'directory', label: 'Pilotos e Equipes', path: 'pilotos-equipes', icon: Users },
+      { id: 'directory', label: 'Pilotos', path: 'pilotos-equipes', icon: Users },
     ],
   },
 ];

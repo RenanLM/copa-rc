@@ -145,7 +145,11 @@ export function StandingsPage() {
       <PageHeader
         eyebrow={`Temporada ${championship.season}`}
         title="Classificação"
-        subtitle={`Após a etapa ${lastFinishedRound} de ${championship.rules.totalRaces}`}
+        subtitle={
+          profile.id === 'spectator'
+            ? `Pontos acumulados por pilotos e equipes após a etapa ${lastFinishedRound}.`
+            : `Após a etapa ${lastFinishedRound} de ${championship.rules.totalRaces}`
+        }
       />
       <SeasonProgress completed={lastFinishedRound} total={championship.rules.totalRaces} />
       <SegmentedControl<View>

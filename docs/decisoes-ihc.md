@@ -26,6 +26,16 @@ Documento vivo: cada fase acrescenta as decisões relevantes. Siglas: **B&S** = 
 | Dark mode, tipografia condensada para números e títulos (Barlow Condensed) e corpo em Inter, com números tabulares para tempos e pontos. | Tokens | N8; B&S Compatibilidade (referência a transmissões esportivas) |
 | Áreas ainda não liberadas aparecem como "Em breve — Em desenvolvimento", com descrição do que farão. | Navegação | N1; N2 |
 
+## Fase 4 — Telemetria rápida do Lucas
+
+| Decisão | Onde | Critério |
+| --- | --- | --- |
+| A última bateria registrada fica no topo do painel do piloto e também aparece no detalhe da etapa, com número de voltas, melhor volta e ritmo médio. | Início, Corridas | B&S Carga de trabalho; N1 Visibilidade do estado; N6 Reconhecimento |
+| A telemetria detalhada e a comparação da melhor volta com o líder da bateria ficam em um painel inferior, acessível por um botão explícito. | Início, Corridas | B&S Condução; N7 Flexibilidade e eficiência; divulgação progressiva |
+| As voltas podem ser trocadas no painel sem filtros avançados ou ações destrutivas; todos os controles novos têm área de toque de pelo menos 44 px. | Telemetria | B&S Gestão de erros; B&S Adaptabilidade |
+| A melhor volta da bateria usa verde e o ritmo médio usa amarelo com texto escuro; a cor é acompanhada por rótulos textuais. | Telemetria | B&S Significado dos códigos; N1 |
+| Não se exibe carga física ou alerta de bateria crítica: os dados atuais só registram voltas, não tensão nem percentual de carga. | Telemetria | N2 Correspondência com o mundo real; honestidade da informação |
+
 ## Fase 2 — Replay e desempenho
 
 | Decisão | Onde | Critério |
@@ -65,10 +75,28 @@ Documento vivo: cada fase acrescenta as decisões relevantes. Siglas: **B&S** = 
 | Seção "Como calculamos" recolhida, em linguagem simples, explicando que são todos os resultados possíveis e que o simulador não estima chances. | Rodapé | N10 Ajuda e documentação |
 | Estados de erro: campeonato encerrado, análise indisponível (muitas etapas restantes) e piloto não encontrado têm mensagem e caminho de volta. | Simulador | N9; B&S Gestão de erros |
 
+## Fase 4 — Espectadora
+
+| Decisão | Onde | Critério |
+| --- | --- | --- |
+| Início como guia rápido: situa a etapa e oferece ações diretas para ver quem lidera, acompanhar a corrida, abrir o feed ou encontrar participantes. | Início | B&S Carga de trabalho; N6 Reconhecimento em vez de memorização; N7 Flexibilidade e eficiência |
+| A barra inferior mantém ícone e rótulo, com "Pilotos" em vez do nome longo "Pilotos e Equipes" para caber melhor na tela estreita; o destino ainda permite alternar entre as duas listas. | Navegação | B&S Condução; N1 Visibilidade do estado; N4 Consistência |
+| A aba "Ao Vivo" apresenta a etapa 4 como simulação acadêmica, com indicador pulsante "AO VIVO · SIMULADO". A pista e o placar são reproduzidos em loop; a ordem muda conforme os tempos ilustrativos e o resultado não altera a classificação oficial. | Guia de pista | B&S Condução — legibilidade e feedback imediato; N1 Visibilidade do estado; N2 Correspondência com o mundo real; honestidade da informação |
+| Os carros percorrem o traçado real desenhado para a etapa; cores das equipes, números dos carros e seleção no placar ajudam a localizar cada participante. | Guia de pista | N6 Reconhecimento em vez de memorização; B&S Significado dos códigos |
+| O placar mostra posição, nome, equipe, diferença estimada para o líder e volta; as linhas reordenam com animação, e setas indicam subida/descida. O controle permite pausar e retomar a simulação. | Guia de pista | B&S Carga de trabalho; N1; N3 Controle e liberdade; N8 Design minimalista |
+| A simulação fica identificada visualmente e é apresentada como conteúdo fictício; não se mistura com resultados finais nem com a classificação do campeonato. | Guia de pista | N1; N2 Correspondência com o mundo real; honestidade da informação |
+| Cor da equipe ajuda a reconhecer o carro, mas vem sempre junto de nome, número ou texto; a cor nunca é o único identificador. | Placar, Feed, Diretório | B&S Significado dos códigos; N6 Reconhecimento em vez de memorização; acessibilidade |
+| Feed de exemplos é filtrável por equipe. Ilustrações geradas pela interface têm rótulo próprio e não se passam por fotos ou publicações reais. O carrossel mostra parcialmente o próximo cartão como sinal de rolagem; a lista vertical mantém as publicações descobríveis. | Feed | B&S Condução; Gestalt — Continuidade e Fechamento; N1; honestidade da informação |
+| Diretório permite alternar entre pilotos e equipes e pesquisar nomes, equipe, cidade e número sem exigir memorização de identificadores. | Pilotos | N6 Reconhecimento em vez de memorização; N7 Flexibilidade e eficiência |
+| A classificação compartilhada explica pontos acumulados em linguagem de espectadora e mantém a opção entre pilotos e equipes. | Classificação | B&S Compatibilidade; N2; N6 |
+| Busca, filtros e cartões têm rótulos explícitos, feedback de lista vazia e alvos de toque de pelo menos 44 px. | Feed, Diretório | B&S Condução e Gestão de erros; N1; acessibilidade |
+
 ## Pendências para as próximas fases
 
+- Conectar telemetria autorizada para substituir a simulação acadêmica pelo placar realmente ao vivo, informando atualização e perda de sinal.
+- Substituir posts e ilustrações de exemplo por publicações e imagens fornecidas pelas equipes, com autoria, etapa e data.
 - Revisar contraste dos textos terciários (`--text-3`) na Fase 6.
-- Rever rótulo longo "Pilotos e Equipes" na navegação da espectadora em telas de 320 px.
+- Validar a navegação e os fluxos da Mariana em teste de usabilidade na arquibancada, incluindo tela pequena, brilho alto e ruído.
 - Avaliar em teste com usuários se a pista animada precisa de números nos carros (hoje só o piloto em foco e o selecionado têm etiqueta).
 - Habilitar tooltip por foco/toque nos pontos dos gráficos (hoje os valores estão em rótulos, na leitura da etapa e na tabela equivalente).
 - Missões de usabilidade (Fase 6): persona, contexto, objetivo e critério de sucesso, sem passo a passo.

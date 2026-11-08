@@ -34,7 +34,7 @@
 }
 
 .active {
-  color: var(--accent);
+  color: var(--nav-active);
 }
 
 .indicator {
@@ -44,5 +44,5 @@
   right: 22%;
   height: 3px;
   border-radius: 0 0 3px 3px;
-  background: var(--accent);
+  background: var(--nav-active);
 }

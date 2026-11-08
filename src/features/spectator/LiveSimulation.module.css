@@ -1,0 +1,149 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+.topline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-2);
+}
+
+.event {
+  display: grid;
+  justify-items: start;
+  gap: 5px;
+  min-width: 0;
+}
+
+.eventName {
+  overflow: hidden;
+  max-width: 100%;
+  color: var(--text-2);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.livePill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 34px;
+  padding: 0 11px;
+  border: 1px solid var(--alert);
+  border-radius: 999px;
+  color: var(--alert);
+  font-size: var(--fs-xs);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+.liveDot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.pulsing .liveDot {
+  animation: pulse 1.4s ease-out infinite;
+}
+
+.disclaimer,
+.controlHint,
+.footnote {
+  color: var(--text-2);
+  font-size: var(--fs-sm);
+  line-height: 1.45;
+}
+
+.controls {
+  display: grid;
+  gap: var(--sp-3);
+}
+
+.controlActions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-2);
+}
+
+.controlButton,
+.playButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  min-height: var(--touch);
+  padding: 0 var(--sp-3);
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--text);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+}
+
+.playButton {
+  border-color: var(--nav-active);
+  background: var(--nav-active);
+  color: #fff;
+}
+
+:global(:root[data-theme='dark']) .playButton {
+  color: var(--accent-ink);
+}
+
+.leaderboardHeading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  padding: var(--sp-4) var(--sp-3) var(--sp-2);
+}
+
+.eyebrow {
+  margin-bottom: 3px;
+  color: var(--text-2);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.leaderboardHeading h2 {
+  font-size: var(--fs-lg);
+}
+
+.lapCount {
+  flex: none;
+  padding: 5px 9px;
+  border-radius: 999px;
+  background: var(--surface-raised);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, currentColor 55%, transparent);
+  }
+  70% {
+    box-shadow: 0 0 0 7px transparent;
+  }
+  100% {
+    box-shadow: 0 0 0 0 transparent;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pulsing .liveDot {
+    animation: none;
+  }
+
+}

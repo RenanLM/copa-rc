@@ -1,5 +1,6 @@
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, Moon, Sun } from 'lucide-react';
 import { useChampionshipLoader } from '../providers/ChampionshipProvider';
+import { useTheme } from '../providers/ThemeProvider';
 import type { ProfileDefinition } from '../profiles';
 import { initials } from '@/lib/format';
 import styles from './TopBar.module.css';
@@ -11,6 +12,7 @@ interface TopBarProps {
 
 export function TopBar({ profile, onOpenProfiles }: TopBarProps) {
   const { state } = useChampionshipLoader();
+  const { theme, toggleTheme } = useTheme();
   const isDemo = state.status === 'ready' ? state.model.championship.source === 'demo' : true;
   const first = profile.persona.name.split(' ')[0];
 
@@ -18,8 +20,8 @@ export function TopBar({ profile, onOpenProfiles }: TopBarProps) {
     <header className={styles.bar}>
       <div className={styles.brand}>
         <svg className={styles.mark} width="28" height="28" viewBox="0 0 64 64" aria-hidden="true">
-          <rect width="64" height="64" rx="14" fill="#171D26" />
-          <path d="M12 44 L26 20 H52 L46 30 H34 L30 38 H42 L36 48 H16 Z" fill="#E8FF57" />
+          <rect width="64" height="64" rx="14" fill="var(--surface)" />
+          <path d="M12 44 L26 20 H52 L46 30 H34 L30 38 H42 L36 48 H16 Z" fill="var(--nav-active)" />
         </svg>
         <span className={styles.wordmark}>
           RC <span>Championship</span>
@@ -34,6 +36,15 @@ export function TopBar({ profile, onOpenProfiles }: TopBarProps) {
           </span>
         )}
       </div>
+      <button
+        type="button"
+        className={styles.theme}
+        onClick={toggleTheme}
+        aria-label={theme === 'light' ? 'Ativar modo escuro' : 'Ativar modo claro'}
+        title={theme === 'light' ? 'Ativar modo escuro' : 'Ativar modo claro'}
+      >
+        {theme === 'light' ? <Moon size={18} aria-hidden="true" /> : <Sun size={18} aria-hidden="true" />}
+      </button>
       <button
         type="button"
         className={styles.profile}

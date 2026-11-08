@@ -5,7 +5,7 @@ Aplicativo mobile de acompanhamento de um campeonato de corridas de carros por c
 | Perfil | Persona | Situação |
 | --- | --- | --- |
 | Piloto | Lucas Ferreira, 24 anos, estudante de Engenharia | **Fases 1 a 3 entregues** (início, corridas, replay, desempenho, simulador, classificação, perfil) |
-| Espectadora | Mariana Costa, 29 anos, designer gráfica | Navegação e Classificação prontas; demais telas na Fase 4 |
+| Espectadora | Mariana Costa, 29 anos, designer gráfica | Guia, placar demonstrativo, classificação, feed e diretório implementados; telemetria e publicações reais pendentes |
 
 > Todos os dados são **de demonstração** (pessoas, equipes, pistas, datas e tempos fictícios). O aplicativo sinaliza isso na interface.
 
@@ -31,6 +31,7 @@ Abra no celular (mesma rede, endereço "Network" exibido pelo Vite) ou use o mod
 | `/?sim=slow#/piloto` | Simula carregamento lento (estado de carregamento) |
 
 O seletor de perfil fica no canto superior direito. Não há autenticação.
+O tema claro é o padrão para facilitar a leitura ao ar livre; use o botão de sol/lua na barra superior para alternar entre os temas. A escolha fica salva neste dispositivo.
 
 ## Scripts
 
@@ -44,3 +45,4 @@ npm run build      # build de produção em dist/
 
 - [docs/arquitetura.md](docs/arquitetura.md) — stack, estrutura, fluxo de dados, regras do campeonato, premissas e roadmap.
 - [docs/decisoes-ihc.md](docs/decisoes-ihc.md) — decisões de design mapeadas aos critérios de Bastien e Scapin e às heurísticas de Nielsen.
+- [docs/Decisões Técnicas - IHC Trabalho Final.pdf](docs/Decisões%20Técnicas%20-%20IHC%20Trabalho%20Final.pdf) — personas, cenários e abordagem de interface do trabalho.

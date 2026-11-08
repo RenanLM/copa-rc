@@ -5,27 +5,28 @@
  */
 :root {
   /* Superfícies */
-  --bg: #0b0f14;
-  --surface: #171d26; /* cards */
-  --surface-raised: #1e2631;
-  --surface-sunken: #11161d;
-  --border: #2b3441;
-  --border-strong: #3a4556;
+  --bg: #f3f5f7;
+  --surface: #ffffff; /* cards */
+  --surface-raised: #f1f3f5;
+  --surface-sunken: #e9edf0;
+  --border: #d4dae0;
+  --border-strong: #aeb8c2;
 
   /* Texto */
-  --text: #f5f7fa;
-  --text-2: #9ca8b8; /* secundário */
-  --text-3: #7d8a9b; /* terciário: só para metadados de baixa importância */
+  --text: #17212b;
+  --text-2: #4c5968; /* secundário */
+  --text-3: #657384; /* terciário: só para metadados de baixa importância */
 
   /* Semânticas */
-  --accent: #e8ff57; /* destaque principal */
-  --accent-ink: #0b0f14; /* texto sobre destaque */
-  --accent-soft: rgb(232 255 87 / 0.12);
-  --data: #43c6e8; /* dados e telemetria */
-  --data-soft: rgb(67 198 232 / 0.14);
-  --alert: #ff704d;
-  --alert-soft: rgb(255 112 77 / 0.14);
-  --gain: #6ee7a0; /* subiu posições */
+  --accent: #d8ef3e; /* destaque principal */
+  --accent-ink: #17212b; /* texto sobre destaque */
+  --accent-soft: rgb(216 239 62 / 0.18);
+  --data: #007b98; /* dados e telemetria */
+  --data-soft: rgb(0 123 152 / 0.12);
+  --alert: #c44524;
+  --alert-soft: rgb(196 69 36 / 0.12);
+  --gain: #16834b; /* subiu posições */
+  --nav-active: #005b70;
 
   /* Tipografia */
   --font-display: 'Barlow Condensed', 'Arial Narrow', system-ui, sans-serif;
@@ -62,6 +63,29 @@
 
   --nav-height: 68px;
   --topbar-height: 56px;
+}
+
+:root[data-theme='dark'] {
+  --bg: #0b0f14;
+  --surface: #171d26;
+  --surface-raised: #1e2631;
+  --surface-sunken: #11161d;
+  --border: #2b3441;
+  --border-strong: #3a4556;
+
+  --text: #f5f7fa;
+  --text-2: #9ca8b8;
+  --text-3: #7d8a9b;
+
+  --accent: #e8ff57;
+  --accent-ink: #0b0f14;
+  --accent-soft: rgb(232 255 87 / 0.12);
+  --data: #43c6e8;
+  --data-soft: rgb(67 198 232 / 0.14);
+  --alert: #ff704d;
+  --alert-soft: rgb(255 112 77 / 0.14);
+  --gain: #6ee7a0;
+  --nav-active: var(--accent);
 }
 
 @media (prefers-reduced-motion: reduce) {
