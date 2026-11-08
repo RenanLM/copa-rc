@@ -5,7 +5,7 @@ Aplicativo mobile de acompanhamento de um campeonato de corridas de carros por c
 | Perfil | Persona | Situação |
 | --- | --- | --- |
 | Piloto | Lucas Ferreira, 24 anos, estudante de Engenharia | **Fases 1 a 3 entregues** (início, corridas, replay, desempenho, simulador, classificação, perfil) |
-| Espectadora | Mariana Costa, 29 anos, designer gráfica | Guia, placar demonstrativo, classificação, feed e diretório implementados; telemetria e publicações reais pendentes |
+| Espectadora | Mariana Costa, 29 anos, designer gráfica | Início, simulação ao vivo, resultado e pódio da etapa 4, classificação, feed e diretório implementados; feed por etapa/data, telemetria e publicações reais pendentes |
 
 > Todos os dados são **de demonstração** (pessoas, equipes, pistas, datas e tempos fictícios). O aplicativo sinaliza isso na interface.
 
@@ -27,10 +27,12 @@ Abra no celular (mesma rede, endereço "Network" exibido pelo Vite) ou use o mod
 | `/#/piloto/desempenho` | Gráficos de evolução, comparativo entre etapas e baterias |
 | `/#/piloto/simulador` | Race Predictor: posição desejada, o que precisa acontecer e classificação projetada |
 | `/#/espectadora` | Experiência de Mariana (espectadora) |
+| `/#/espectadora/etapa/etapa-4` | Resultado e pódio da etapa 4 (só existe a partir do momento "após a etapa 4") |
+| `/?momento=apos-etapa-4#/piloto` | Abre o app no momento "após a etapa 4" (outros: `apos-etapa-3`, `etapa-4-em-andamento`) |
 | `/?sim=error#/piloto` | Simula falha no primeiro carregamento (estado de erro) |
 | `/?sim=slow#/piloto` | Simula carregamento lento (estado de carregamento) |
 
-O seletor de perfil fica no canto superior direito. Não há autenticação.
+O seletor de perfil fica no canto superior direito e também escolhe o **momento do campeonato** (após a etapa 3, etapa 4 em andamento, após a etapa 4). O piloto começa após a etapa 3 e a espectadora, com a etapa 4 em andamento; a escolha vale só para a sessão. Não há autenticação.
 O tema claro é o padrão para facilitar a leitura ao ar livre; use o botão de sol/lua na barra superior para alternar entre os temas. A escolha fica salva neste dispositivo.
 
 ## Scripts

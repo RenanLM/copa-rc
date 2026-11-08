@@ -9,6 +9,7 @@ import {
   Users,
   type LucideIcon,
 } from 'lucide-react';
+import type { DemoScenario } from '@/data/demo/scenarios';
 import type { PilotId } from '@/domain';
 
 /**
@@ -41,6 +42,8 @@ export interface ProfileDefinition {
   slug: string;
   roleLabel: string;
   persona: Persona;
+  /** Momento do campeonato com que a demonstração começa para este perfil. */
+  defaultScenario: DemoScenario;
   nav: readonly NavItem[];
 }
 
@@ -49,6 +52,7 @@ export const PROFILES: readonly ProfileDefinition[] = [
     id: 'pilot',
     slug: 'piloto',
     roleLabel: 'Piloto',
+    defaultScenario: 'after-race-3',
     persona: {
       name: 'Lucas Ferreira',
       age: 24,
@@ -67,6 +71,7 @@ export const PROFILES: readonly ProfileDefinition[] = [
     id: 'spectator',
     slug: 'espectadora',
     roleLabel: 'Espectadora',
+    defaultScenario: 'race-4-live',
     persona: {
       name: 'Mariana Costa',
       age: 29,

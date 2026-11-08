@@ -1,5 +1,5 @@
 import { validateChampionship, type Championship, type ValidationIssue } from '@/domain';
-import { buildDemoChampionship } from './demo';
+import { buildFullDemoChampionship, applyDemoScenario, DEMO_SCENARIOS } from './demo';
 
 /**
  * Fronteira entre a interface e a origem dos dados. Hoje só existe a fonte de
@@ -43,8 +43,15 @@ export function createDemoRepository(
           'Não foi possível carregar os dados do campeonato.',
         );
       }
-      const championship = buildDemoChampionship();
-      const issues = validateChampionship(championship);
+      // Devolve o campeonato completo; cada "momento" é um recorte dele (ver scenarios.ts).
+      // Todos os momentos precisam ser consistentes, senão nenhum deles é exibido.
+      const championship = buildFullDemoChampionship();
+      const issues = DEMO_SCENARIOS.flatMap((scenario) =>
+        validateChampionship(applyDemoScenario(championship, scenario.id)).map((issue) => ({
+          ...issue,
+          message: `[${scenario.label}] ${issue.message}`,
+        })),
+      );
       if (issues.length > 0) {
         throw new DataLoadError(
           'invalid',

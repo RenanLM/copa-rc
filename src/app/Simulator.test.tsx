@@ -1,5 +1,6 @@
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import { afterEach, beforeEach } from 'vitest';
+import { setScenarioChoice } from '@/lib/demo-scenario';
 import { setPendingSimulation } from '@/lib/demo-settings';
 import { App } from './App';
 
@@ -7,6 +8,8 @@ const ready = { timeout: 3000 };
 
 beforeEach(() => {
   setPendingSimulation('none');
+  setScenarioChoice('auto');
+  sessionStorage.clear();
   localStorage.clear();
 });
 

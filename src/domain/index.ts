@@ -14,3 +14,4 @@ export * from './slot-solver';
 export * from './outcomes';
 export * from './scenario';
 export * from './predictor';
+export * from './race-impact';

@@ -6,7 +6,8 @@
 }
 
 .heroHeading,
-.leadersHeading {
+.leadersHeading,
+.nextHead {
   display: flex;
   align-items: center;
   gap: var(--sp-3);
@@ -177,6 +178,112 @@
 .textLink {
   color: var(--nav-active);
   font-size: var(--fs-sm);
+}
+
+/* Início por status da etapa */
+.heroTitle {
+  flex: 1;
+  min-width: 0;
+}
+
+.podiumMini {
+  display: grid;
+  gap: var(--sp-2);
+}
+
+.podiumRow {
+  display: grid;
+  grid-template-columns: 30px 10px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--sp-2);
+  min-height: 46px;
+  border-bottom: 1px solid var(--border);
+}
+
+.podiumRow:last-child {
+  border-bottom: 0;
+}
+
+.podiumPos {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+
+.podiumName {
+  display: grid;
+  min-width: 0;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.podiumName small {
+  color: var(--text-2);
+  font-size: var(--fs-xs);
+  font-weight: 400;
+}
+
+.nextCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.nextHead {
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.nextHead h2 {
+  font-size: var(--fs-lg);
+  line-height: 1.2;
+}
+
+.nextInfo {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  color: var(--text-2);
+  font-size: var(--fs-sm);
+}
+
+.listTitle {
+  margin-bottom: var(--sp-1);
+  color: var(--text-2);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.sub {
+  color: var(--text-2);
+  font-size: var(--fs-xs);
+}
+
+.howCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.howCard h2 {
+  font-size: var(--fs-lg);
+  line-height: 1.2;
+}
+
+.how {
+  display: grid;
+  gap: var(--sp-3);
+  margin-top: var(--sp-2);
+  padding-left: var(--sp-4);
+  color: var(--text-2);
+  font-size: var(--fs-sm);
+  list-style: disc;
+}
+
+.how strong {
+  color: var(--text);
 }
 
 @media (min-width: 420px) {

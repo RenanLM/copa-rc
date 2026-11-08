@@ -9,13 +9,15 @@ import {
   type ReactNode,
 } from 'react';
 import { createDemoRepository } from '@/data/repository';
-import { createChampionshipModel, type Championship, type ChampionshipModel } from '@/domain';
+import type { Championship, ChampionshipModel } from '@/domain';
 import { takePendingSimulation } from '@/lib/demo-settings';
+import { ModelContext } from './model-context';
 
 type LoadState =
   | { status: 'loading' }
   | { status: 'error'; error: Error }
-  | { status: 'ready'; model: ChampionshipModel };
+  /** `championship` é o conjunto COMPLETO; o momento escolhido o recorta (ScenarioProvider). */
+  | { status: 'ready'; championship: Championship };
 
 interface ChampionshipContextValue {
   state: LoadState;
@@ -40,7 +42,7 @@ export function ChampionshipProvider({ children }: { children: ReactNode }) {
     let cancelled = false;
     inflight.current.promise.then(
       (championship) => {
-        if (!cancelled) setState({ status: 'ready', model: createChampionshipModel(championship) });
+        if (!cancelled) setState({ status: 'ready', championship });
       },
       (error: unknown) => {
         if (!cancelled) {
@@ -68,9 +70,19 @@ export function useChampionshipLoader(): ChampionshipContextValue {
   return ctx;
 }
 
-/** Modelo do campeonato. Só use dentro de `ChampionshipGate`, que garante dados prontos. */
+/**
+ * Modelo do campeonato no momento escolhido. Só use dentro de `ChampionshipGate`,
+ * que garante dados prontos.
+ */
 export function useModel(): ChampionshipModel {
+  const model = useContext(ModelContext);
+  if (!model) throw new Error('useModel chamado antes de os dados estarem prontos');
+  return model;
+}
+
+/** Campeonato completo, sem recorte de momento (ex.: fonte da simulação ao vivo). */
+export function useBaseChampionship(): Championship {
   const { state } = useChampionshipLoader();
-  if (state.status !== 'ready') throw new Error('useModel chamado antes de os dados estarem prontos');
-  return state.model;
+  if (state.status !== 'ready') throw new Error('useBaseChampionship chamado antes de os dados estarem prontos');
+  return state.championship;
 }

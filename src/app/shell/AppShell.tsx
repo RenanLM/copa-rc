@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { motion } from 'motion/react';
 import { useLocation, useOutlet } from 'react-router-dom';
 import { ProfileProvider } from '../providers/ProfileProvider';
+import { ScenarioProvider } from '../providers/ScenarioProvider';
 import { rememberProfile, type ProfileDefinition } from '../profiles';
 import { BottomNav } from './BottomNav';
 import { ChampionshipGate } from './ChampionshipGate';
@@ -35,6 +36,7 @@ export function AppShell({ profile }: { profile: ProfileDefinition }) {
 
   return (
     <ProfileProvider profile={profile}>
+      <ScenarioProvider profile={profile}>
       <div className={styles.app}>
         <a
           className={styles.skip}
@@ -63,6 +65,7 @@ export function AppShell({ profile }: { profile: ProfileDefinition }) {
         <BottomNav profile={profile} />
         <ProfileSheet open={sheetOpen} onClose={() => setSheetOpen(false)} current={profile} />
       </div>
+      </ScenarioProvider>
     </ProfileProvider>
   );
 }

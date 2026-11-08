@@ -76,9 +76,9 @@ export function RaceDetailPage() {
       {!finished && (
         <Card>
           <div className={styles.pending}>
-            <Badge tone={race.status === 'live' ? 'alert' : 'accent'}>
+            <Badge tone={race.status === 'live' ? 'data' : 'accent'}>
               {race.status === 'live'
-                ? 'Ao vivo'
+                ? 'Em andamento'
                 : formatCountdown(daysBetween(championship.referenceDate, race.date))}
             </Badge>
             <EmptyState

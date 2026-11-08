@@ -16,3 +16,12 @@ if (!window.matchMedia) {
 }
 Element.prototype.scrollTo = Element.prototype.scrollTo ?? (() => {});
 window.scrollTo = (() => {}) as typeof window.scrollTo;
+
+// jsdom ainda não implementa o elemento <dialog> modal, usado pela folha de perfil.
+HTMLDialogElement.prototype.showModal ??= function showModal(this: HTMLDialogElement) {
+  this.setAttribute('open', '');
+};
+HTMLDialogElement.prototype.close ??= function close(this: HTMLDialogElement) {
+  this.removeAttribute('open');
+  this.dispatchEvent(new Event('close'));
+};

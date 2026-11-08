@@ -26,7 +26,7 @@ function RaceStatus({ race, isNext, referenceDate }: { race: Race; isNext: boole
       </Badge>
     );
   }
-  if (race.status === 'live') return <Badge tone="alert">Ao vivo</Badge>;
+  if (race.status === 'live') return <Badge tone="data">Em andamento</Badge>;
   return isNext ? (
     <Badge tone="accent">{formatCountdown(daysBetween(referenceDate, race.date))}</Badge>
   ) : (

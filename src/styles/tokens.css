@@ -28,6 +28,12 @@
   --gain: #16834b; /* subiu posições */
   --nav-active: #005b70;
 
+  /* Medalhas do pódio (sempre acompanhadas de número e texto) */
+  --gold: #e5b700;
+  --silver: #aeb7c2;
+  --bronze: #c9803f;
+  --medal-ink: #17212b;
+
   /* Tipografia */
   --font-display: 'Barlow Condensed', 'Arial Narrow', system-ui, sans-serif;
   --font-body: 'Inter Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
@@ -86,6 +92,11 @@
   --alert-soft: rgb(255 112 77 / 0.14);
   --gain: #6ee7a0;
   --nav-active: var(--accent);
+
+  --gold: #f6c945;
+  --silver: #c9d1dc;
+  --bronze: #d9945a;
+  --medal-ink: #0b0f14;
 }
 
 @media (prefers-reduced-motion: reduce) {

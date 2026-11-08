@@ -21,8 +21,8 @@ export function NextRaceCard({ race, track, referenceDate, calendarPath }: NextR
         <h2 className={styles.kickerTitle} id="next-race-title">
           {live ? 'Corrida em andamento' : 'Próxima corrida'}
         </h2>
-        <Badge tone={live ? 'alert' : 'data'}>
-          {live ? 'Ao vivo' : formatCountdown(daysBetween(referenceDate, race.date))}
+        <Badge tone="data">
+          {live ? 'Em andamento' : formatCountdown(daysBetween(referenceDate, race.date))}
         </Badge>
       </div>
       <p className={styles.heading}>

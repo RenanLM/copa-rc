@@ -6,6 +6,7 @@
 
 .topline {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: var(--sp-2);
@@ -34,9 +35,9 @@
   gap: 7px;
   min-height: 34px;
   padding: 0 11px;
-  border: 1px solid var(--alert);
+  border: 1px solid var(--nav-active);
   border-radius: 999px;
-  color: var(--alert);
+  color: var(--nav-active);
   font-size: var(--fs-xs);
   font-weight: 800;
   letter-spacing: 0.04em;
@@ -97,6 +98,33 @@
 
 :global(:root[data-theme='dark']) .playButton {
   color: var(--accent-ink);
+}
+
+.finished {
+  display: grid;
+  gap: var(--sp-3);
+}
+
+.finishedTitle {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-family: var(--font-display);
+  font-size: var(--fs-xl);
+  font-weight: 700;
+}
+
+.speedRow {
+  display: grid;
+  gap: 4px;
+}
+
+.speedLabel {
+  color: var(--text-2);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .leaderboardHeading {

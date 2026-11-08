@@ -5,6 +5,7 @@ import { PerformancePage } from '@/features/performance/PerformancePage';
 import { PilotProfilePage } from '@/features/profile/PilotProfilePage';
 import { RaceDetailPage } from '@/features/races/RaceDetailPage';
 import { RaceReplayPage } from '@/features/replay/RaceReplayPage';
+import { RaceResultPage } from '@/features/results/RaceResultPage';
 import { RacesPage } from '@/features/races/RacesPage';
 import { SpectatorDirectoryPage } from '@/features/spectator/SpectatorDirectoryPage';
 import { SpectatorFeedPage } from '@/features/spectator/SpectatorFeedPage';
@@ -42,7 +43,7 @@ export const DETAIL_ROUTES: Record<ProfileId, { path: string; element: ReactElem
     { path: 'corridas/:raceId/replay', element: <RaceReplayPage /> },
     { path: 'desempenho', element: <PerformancePage /> },
   ],
-  spectator: [],
+  spectator: [{ path: 'etapa/:raceId', element: <RaceResultPage /> }],
 };
 
 export const NOT_FOUND = <NotFoundPage />;

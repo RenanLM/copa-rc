@@ -13,7 +13,7 @@ interface TopBarProps {
 export function TopBar({ profile, onOpenProfiles }: TopBarProps) {
   const { state } = useChampionshipLoader();
   const { theme, toggleTheme } = useTheme();
-  const isDemo = state.status === 'ready' ? state.model.championship.source === 'demo' : true;
+  const isDemo = state.status === 'ready' ? state.championship.source === 'demo' : true;
   const first = profile.persona.name.split(' ')[0];
 
   return (

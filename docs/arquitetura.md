@@ -33,6 +33,7 @@ src/
     outcomes.ts    análise de resultados do piloto (combinações de colocações) e estados
     scenario.ts    cenário hipotético e classificação projetada
     predictor.ts   liga a análise ao campeonato (horizonte, cenários prontos, edição do pódio)
+    race-impact.ts pódio, destaques e antes/depois da classificação de uma etapa finalizada
   data/
     repository.ts  fronteira com a fonte de dados (hoje: demonstração)
     demo/          dados fictícios + gerador determinístico de voltas
@@ -43,7 +44,8 @@ src/
     shell/         barra superior, navegação inferior, seletor de perfil
   components/    Componentes compartilhados (ui/ e PilotLine)
   features/      Telas por área: home, races, standings, profile, placeholders,
-                 replay (pista animada, reutilizável) e performance (gráficos)
+                 replay (pista animada, reutilizável), performance (gráficos),
+                 results (pódio animado e resultado da etapa) e spectator (início, ao vivo, feed, diretório)
   lib/           formatação (tempos, datas) e opções de demonstração
   styles/        tokens e CSS global
 ```
@@ -153,6 +155,27 @@ Componentes não conhecem personas. A tela de classificação recebe o piloto em
 
 `MotionConfig reducedMotion="user"` + tokens de duração que zeram sob `prefers-reduced-motion`. Contadores animados (`AnimatedNumber`) contam só na primeira exibição da sessão e expõem o valor final a leitores de tela.
 
+### Momento do campeonato (demonstração)
+
+Piloto e espectadora precisam enxergar **a mesma temporada**. Para isso os dados trazem o campeonato completo (etapas 1 a 4, com a etapa 4 gerada como as demais) e a interface o recorta em um de três momentos (`src/data/demo/scenarios.ts`):
+
+| Momento | Etapa 4 | Classificação | Quem começa nele |
+| --- | --- | --- | --- |
+| Após a etapa 3 | agendada, sem resultado | após 3 etapas | piloto (Lucas) |
+| Etapa 4 em andamento | `live`, sem resultado | após 3 etapas | espectadora (Mariana) |
+| Após a etapa 4 | finalizada, com resultado | após 4 etapas | nenhum (escolha manual ou fim da simulação) |
+
+- `ScenarioProvider` (dentro do `AppShell`) aplica o recorte e entrega o modelo a todas as telas. Trocar de momento é instantâneo (não recarrega dados). A fonte completa continua acessível por `useBaseChampionship()` e é de onde a simulação "ao vivo" lê as voltas.
+- O momento é escolhido na folha de perfil ("Momento do campeonato"), por `?momento=apos-etapa-3 | etapa-4-em-andamento | apos-etapa-4` ou pelo botão "Ver resultado e pódio" no fim da simulação. Fica só na **sessão**: fechar a aba volta ao padrão do perfil, então um avaliador nunca herda o estado deixado por outra pessoa.
+- Os três momentos são validados na carga (`validateChampionship`); se algum for inconsistente, nenhum é exibido.
+- Quando os dados deixarem de ser de demonstração (`source: 'live'`), o recorte não existe e o seletor some.
+
+### Resultado da etapa e pódio
+
+`getRaceImpact` (domínio) calcula, a partir dos mesmos resultados e das mesmas regras de pontos: o pódio, os destaques (vencedor, dobradinha ou dois pilotos de uma equipe no pódio, nova liderança de pilotos e de equipes, volta mais rápida, maior avanço) e o antes/depois da classificação de pilotos e de equipes. Liderança só é anunciada quando é inequívoca antes e depois (nunca sobre um empate, pois o desempate é indefinido).
+
+A página de resultado (`features/results`) é pensada para quem acompanha de fora: pódio com revelação animada (3º, 2º e depois 1º; medalha sempre acompanhada de número e texto), destaques em frases, classificação da etapa com pontos e "Como ficou o campeonato", que mostra a classificação de antes e reordena as linhas até a de depois quando o quadro aparece na tela. Com movimento reduzido tudo aparece direto.
+
 ## 8. Roadmap
 
 | Fase | Conteúdo | Situação |
@@ -160,12 +183,12 @@ Componentes não conhecem personas. A tela de classificação recebe o piloto em
 | 1 | Identidade, navegação, painel de Lucas, resultados da etapa 3, classificação | **Concluída** |
 | 2 | Race Replay, gráficos animados, baterias, comparativo entre etapas | **Concluída** |
 | 3 | Race Predictor (simulador) | **Concluída** |
-| 4 | Experiência de Mariana: guia, placar demonstrativo, classificação, feed e diretório | **Interface concluída com dados demonstrativos**; telemetria e publicações reais pendentes |
+| 4 | Experiência de Mariana: início, ao vivo, resultado e pódio, classificação, feed e diretório | **Em andamento**: início, simulação ao vivo, resultado da etapa 4 com pódio, classificação e diretório prontos; faltam feed por etapa/data com limite de 4 publicações por equipe e prova, e fontes reais (telemetria, publicações) |
 | 5 | Probabilidades de título (cálculo determinístico, depois Monte Carlo se justificável) | Pendente |
 | 6 | Missões de usabilidade, acessibilidade, desempenho | Pendente |
 
 ### Experiência da espectadora
 
-As telas de Mariana priorizam leitura rápida e reconhecimento visual na arquibancada. O início reúne o contexto da etapa, acessos diretos ao placar, classificação, feed e participantes. A aba "Ao Vivo" simula a etapa 4 em loop, com carros se movendo no traçado, placar que reordena nas ultrapassagens e estado "AO VIVO · SIMULADO". O feed e o diretório são navegáveis e filtráveis, e o conteúdo é identificado como demonstrativo.
+As telas de Mariana priorizam leitura rápida e reconhecimento visual na arquibancada. O **início** mostra o status real da etapa do momento (agendada, em andamento ou finalizada), o resultado resumido quando ela acaba de terminar, o próximo evento, os líderes (pilotos e equipes) e uma explicação do campeonato lida das regras oficiais. A aba **"Ao Vivo"**, com a etapa em andamento, mostra uma **simulação** (nunca "transmissão"): carros no traçado, placar que reordena nas ultrapassagens e controles de pausar, reiniciar, velocidade e "ir para o final". Ela usa as voltas da etapa 4 e termina exatamente no resultado oficial; ao fim, um botão explícito leva ao resultado e ao pódio e a classificação do campeonato passa a refletir a etapa. Sem etapa em andamento, a aba explica isso e oferece a simulação como recurso de demonstração.
 
-O conjunto atual não contém posição real dos carros, publicações nem fotografias fornecidas pelas equipes. A corrida ao vivo é uma simulação acadêmica determinística, independente dos resultados oficiais; não deve ser interpretada como telemetria. As ilustrações do feed também são rotuladas como demonstrativas. Para concluir a experiência real do cenário do PDF, falta integrar uma fonte autorizada de cronometragem e publicações/imagens das equipes, com estado de atualização e tratamento de perda de sinal.
+O conjunto atual não contém posições reais dos carros, publicações nem fotografias fornecidas pelas equipes: a simulação é uma reprodução dos dados fictícios, rotulada como "Simulação ilustrativa". O feed e o diretório são navegáveis e filtráveis (o feed ainda só por equipe), e o conteúdo é identificado como demonstrativo. Para concluir a experiência real do cenário do PDF, falta integrar uma fonte autorizada de cronometragem e publicações e imagens das equipes, com estado de atualização e tratamento de perda de sinal.

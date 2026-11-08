@@ -81,7 +81,7 @@ Documento vivo: cada fase acrescenta as decisões relevantes. Siglas: **B&S** = 
 | --- | --- | --- |
 | Início como guia rápido: situa a etapa e oferece ações diretas para ver quem lidera, acompanhar a corrida, abrir o feed ou encontrar participantes. | Início | B&S Carga de trabalho; N6 Reconhecimento em vez de memorização; N7 Flexibilidade e eficiência |
 | A barra inferior mantém ícone e rótulo, com "Pilotos" em vez do nome longo "Pilotos e Equipes" para caber melhor na tela estreita; o destino ainda permite alternar entre as duas listas. | Navegação | B&S Condução; N1 Visibilidade do estado; N4 Consistência |
-| A aba "Ao Vivo" apresenta a etapa 4 como simulação acadêmica, com indicador pulsante "AO VIVO · SIMULADO". A pista e o placar são reproduzidos em loop; a ordem muda conforme os tempos ilustrativos e o resultado não altera a classificação oficial. | Guia de pista | B&S Condução — legibilidade e feedback imediato; N1 Visibilidade do estado; N2 Correspondência com o mundo real; honestidade da informação |
+| A aba "Ao Vivo" apresenta a etapa em andamento como **simulação**: selo "Simulação ilustrativa", pílula neutra "Simulação em andamento" (nunca "ao vivo" em vermelho, que lembraria uma transmissão) e aviso de que posições, tempos e ultrapassagens são fictícios. A pessoa controla a simulação (pausar, reiniciar, velocidade, ir para o final); ela não reinicia sozinha e termina no resultado oficial. | Guia de pista | B&S Controle explícito; N1 Visibilidade do estado; N2 Correspondência com o mundo real; honestidade da informação |
 | Os carros percorrem o traçado real desenhado para a etapa; cores das equipes, números dos carros e seleção no placar ajudam a localizar cada participante. | Guia de pista | N6 Reconhecimento em vez de memorização; B&S Significado dos códigos |
 | O placar mostra posição, nome, equipe, diferença estimada para o líder e volta; as linhas reordenam com animação, e setas indicam subida/descida. O controle permite pausar e retomar a simulação. | Guia de pista | B&S Carga de trabalho; N1; N3 Controle e liberdade; N8 Design minimalista |
 | A simulação fica identificada visualmente e é apresentada como conteúdo fictício; não se mistura com resultados finais nem com a classificação do campeonato. | Guia de pista | N1; N2 Correspondência com o mundo real; honestidade da informação |
@@ -90,6 +90,20 @@ Documento vivo: cada fase acrescenta as decisões relevantes. Siglas: **B&S** = 
 | Diretório permite alternar entre pilotos e equipes e pesquisar nomes, equipe, cidade e número sem exigir memorização de identificadores. | Pilotos | N6 Reconhecimento em vez de memorização; N7 Flexibilidade e eficiência |
 | A classificação compartilhada explica pontos acumulados em linguagem de espectadora e mantém a opção entre pilotos e equipes. | Classificação | B&S Compatibilidade; N2; N6 |
 | Busca, filtros e cartões têm rótulos explícitos, feedback de lista vazia e alvos de toque de pelo menos 44 px. | Feed, Diretório | B&S Condução e Gestão de erros; N1; acessibilidade |
+
+## Fase 4 — Etapa 4, pódio e momentos do campeonato
+
+| Decisão | Onde | Critério |
+| --- | --- | --- |
+| Um **momento do campeonato** único (após a etapa 3, etapa 4 em andamento, após a etapa 4) alimenta todas as telas. Piloto e espectadora veem os mesmos números; o padrão de cada perfil conta a sua história (Lucas após a etapa 3, Mariana com a etapa 4 em andamento). | Folha de perfil, todo o app | B&S Homogeneidade e coerência; N4 Consistência e padrões |
+| O seletor de momento fica na folha de perfil, com o estado atual escrito ("Agora: …"), e vale só para a sessão. | Folha de perfil | N1 Visibilidade do estado; N3 Controle e liberdade |
+| Ao terminar a simulação, **um botão explícito** ("Ver resultado e pódio") leva ao resultado; nada muda sozinho enquanto a pessoa assiste. | Ao Vivo | B&S Controle explícito; N3 |
+| O pódio é revelado do 3º para o 1º, como numa premiação, com medalha sempre acompanhada de número, texto ("Lugar 1, medalha de ouro") e pontos. Há botão "Rever" e, com movimento reduzido, tudo aparece de uma vez. Ordem de leitura 1º-2º-3º para leitores de tela, ordem visual 2º-1º-3º. | Resultado da etapa | B&S Significado dos códigos; Adaptabilidade; acessibilidade |
+| "Destaques da etapa" em frases curtas, sem jargão ("Dobradinha da Vortex", "Nova liderança do campeonato"). A liderança só é anunciada quando é inequívoca antes e depois: não se conta empate como conquista. | Resultado da etapa | N2; B&S Significado dos códigos; honestidade da informação |
+| "Como ficou o campeonato" mostra a classificação **antes** e reordena as linhas até a **depois**, com setas e pontos somados, só quando o quadro aparece na tela; "Rever" repete. | Resultado da etapa | N1; B&S Condução (feedback imediato) |
+| A classificação da etapa mostra os pontos de cada posição (só as 5 primeiras pontuam, dito na tela) e abre as voltas ao toque. | Resultado da etapa | B&S Carga de trabalho (divulgação progressiva); N6 |
+| O início da espectadora mostra o **status** da etapa (Agendada, Em andamento, Finalizada) com selo, o resultado resumido quando acabou de terminar, o próximo evento, os líderes e "Como funciona o campeonato" com os valores lidos das regras. Status de etapa em andamento diz "Em andamento", não "Ao vivo". | Início da espectadora | N1; N2; N10 Ajuda e documentação |
+| Em telas estreitas a palavra "Championship" sai da barra superior para que o selo "Demo" nunca fique coberto: é a pista permanente de que os dados são fictícios. | Barra superior | N1; honestidade da informação |
 
 ## Pendências para as próximas fases
 

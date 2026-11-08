@@ -1,5 +1,6 @@
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import { afterEach, beforeEach } from 'vitest';
+import { setScenarioChoice } from '@/lib/demo-scenario';
 import { setPendingSimulation } from '@/lib/demo-settings';
 import { App } from './App';
 
@@ -7,6 +8,8 @@ const ready = { timeout: 3000 };
 
 beforeEach(() => {
   setPendingSimulation('none');
+  setScenarioChoice('auto');
+  sessionStorage.clear();
   localStorage.clear();
   const favicon = document.createElement('link');
   favicon.rel = 'icon';
@@ -73,30 +76,23 @@ describe('aplicativo (interface)', () => {
 
   it('apresenta a etapa 4 em andamento na página inicial da espectadora', async () => {
     open('#/espectadora');
-    expect(await screen.findByText('Ao vivo · simulação', {}, ready)).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: 'GP Turbo Norte' })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: 'GP Turbo Norte' }, ready)).toBeInTheDocument();
+    expect(screen.getByText('Em andamento')).toBeInTheDocument();
     expect(screen.getByText(/não há dados reais ao vivo/)).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: /Acompanhar corrida/ })).toHaveAttribute(
-      'href',
-      '#/espectadora/ao-vivo',
-    );
-    expect(screen.queryByText('Próxima etapa')).not.toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Acompanhar etapa/ })).toHaveAttribute('href', '#/espectadora/ao-vivo');
   });
 
   it('simula a etapa 4 para a espectadora com pista, ordem dinâmica e origem identificada', async () => {
     open('#/espectadora/ao-vivo');
     expect(await screen.findByRole('heading', { name: 'Ao Vivo' }, ready)).toBeInTheDocument();
     expect(screen.getByText('Simulação ilustrativa')).toBeInTheDocument();
-    expect(screen.getByText(/Posições e ultrapassagens são fictícias/)).toBeInTheDocument();
+    expect(screen.getByText(/Posições, tempos e ultrapassagens são fictícios/)).toBeInTheDocument();
     expect(screen.getAllByText(/GP Turbo Norte/)).toHaveLength(2);
     expect(screen.getByRole('img', { name: /Simulação da etapa 4, GP Turbo Norte/ })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'Posições na pista' })).toBeInTheDocument();
-    const pauseButton = screen.queryByRole('button', { name: 'Pausar simulação' });
-    if (pauseButton) {
-      fireEvent.click(pauseButton);
-      expect(await screen.findByRole('button', { name: 'Retomar simulação' })).toBeInTheDocument();
-    }
-    fireEvent.click(screen.getByRole('button', { name: 'Retomar simulação' }));
+    // a simulação começa sozinha; a pessoa pode pausar e retomar
+    fireEvent.click(await screen.findByRole('button', { name: 'Pausar simulação' }));
+    fireEvent.click(await screen.findByRole('button', { name: 'Retomar simulação' }));
     expect(await screen.findByRole('button', { name: 'Pausar simulação' })).toBeInTheDocument();
   });
 
@@ -129,7 +125,8 @@ describe('aplicativo (interface)', () => {
     expect(lucas).toHaveAttribute('aria-expanded', 'false');
     fireEvent.click(lucas);
     expect(lucas).toHaveAttribute('aria-expanded', 'true');
-    expect(await screen.findByText('Ritmo médio')).toBeInTheDocument();
+    // o detalhe das voltas aparece (a telemetria da bateria também usa o rótulo "Ritmo médio")
+    expect((await screen.findAllByText('Ritmo médio')).length).toBeGreaterThanOrEqual(2);
   });
 
   it('etapas futuras não exibem resultados inventados', async () => {

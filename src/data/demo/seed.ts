@@ -243,4 +243,19 @@ export const raceSpecs: RaceGenerationSpec[] = [
     ],
     ...HEAT,
   },
+  {
+    // Etapa 4 (usada nos momentos "etapa 4 em andamento" e "após a etapa 4").
+    // Dobradinha da Vortex (Rafael 1º, Helena 2º): Rafael assume a liderança do
+    // campeonato e a Vortex passa à frente da Apex entre as equipes.
+    raceId: 'etapa-4',
+    seed: 20261025,
+    baseLapMs: 14_200,
+    finalLaps: 20,
+    order: [
+      'rafael-nunes', 'helena-duarte', 'lucas-ferreira', 'diego-martins',
+      'thiago-barros', 'bianca-moreira', 'carla-ribeiro', 'mateus-cavalcante',
+      'paula-siqueira', 'andre-lima', 'larissa-pinheiro', 'juliana-freitas',
+    ],
+    ...HEAT,
+  },
 ];

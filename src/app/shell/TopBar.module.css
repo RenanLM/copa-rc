@@ -106,7 +106,18 @@
   white-space: nowrap;
 }
 
-@media (max-width: 359px) {
+/*
+ * Telas estreitas: sem espaço para tudo na barra. O selo "Demo" e os botões têm
+ * prioridade (o selo avisa que os dados são fictícios), então a palavra
+ * "Championship" e, mais adiante, o nome do perfil saem antes.
+ */
+@media (max-width: 440px) {
+  .wordmark span {
+    display: none;
+  }
+}
+
+@media (max-width: 379px) {
   .profileName {
     display: none;
   }
