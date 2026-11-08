@@ -102,8 +102,10 @@ describe('aplicativo (interface)', () => {
     expect(screen.getByText('Conteúdo de demonstração')).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: 'Torque Lab' }));
     expect(screen.getByRole('button', { name: 'Torque Lab' })).toHaveAttribute('aria-pressed', 'true');
-    expect(screen.getAllByRole('heading', { name: 'Ajustes antes da largada' })).toHaveLength(2);
-    expect(screen.queryByRole('heading', { name: 'Pódio da etapa' })).not.toBeInTheDocument();
+    // os filtros combinados, a cota e a paginação são cobertos em Feed.test.tsx
+    const articles = screen.getAllByRole('article');
+    expect(articles.length).toBeGreaterThan(0);
+    for (const article of articles) expect(within(article).getByText('Torque Lab')).toBeInTheDocument();
   });
 
   it('ajuda a encontrar pilotos por nome e oferece a lista de equipes', async () => {

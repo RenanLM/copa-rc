@@ -114,6 +114,30 @@ export interface TiebreakConfig {
   criteria: readonly TiebreakCriterion[];
 }
 
+/**
+ * Tipos de publicação do feed, conforme o regulamento: informações sobre pilotos,
+ * acontecimentos, resultados e bastidores da corrida.
+ */
+export type PostKind = 'result' | 'event' | 'pilots' | 'behind-the-scenes';
+
+/** Publicação de uma equipe no feed de uma etapa. */
+export interface FeedPost {
+  id: string;
+  teamId: TeamId;
+  raceId: RaceId;
+  kind: PostKind;
+  title: string;
+  text: string;
+  /** Data e hora no formato AAAA-MM-DDTHH:mm (horário local da prova), quando disponíveis. */
+  publishedAt?: string;
+  /** Pilotos citados na publicação. */
+  pilotIds?: readonly PilotId[];
+  /** Descrição da imagem (texto alternativo). */
+  imageAlt: string;
+  /** Publicações de demonstração nunca são exibidas como conteúdo real. */
+  isDemo: boolean;
+}
+
 /** Origem do conjunto de dados exibido. */
 export type DataSource = 'demo' | 'live';
 
@@ -131,6 +155,8 @@ export interface Championship {
   tracks: readonly Track[];
   races: readonly Race[];
   results: readonly RaceResults[];
+  /** Publicações das equipes (todas as etapas), das mais antigas às mais recentes ou em qualquer ordem. */
+  feed: readonly FeedPost[];
 }
 
 export interface PilotStanding {

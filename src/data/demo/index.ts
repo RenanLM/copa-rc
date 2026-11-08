@@ -1,4 +1,5 @@
 import { DEFAULT_TIEBREAK, OFFICIAL_RULES, type Championship } from '@/domain';
+import { buildDemoFeed } from './feed-seed';
 import { generateRaceResults } from './generate';
 import { applyDemoScenario, type DemoScenario } from './scenarios';
 import { pilots, raceSpecs, races, teams, tracks } from './seed';
@@ -10,6 +11,7 @@ export * from './scenarios';
  * 4ª agendada). Todas as telas leem o mesmo objeto; só o momento muda.
  */
 export function buildDemoChampionship(scenario: DemoScenario = 'after-race-3'): Championship {
+  const results = raceSpecs.map(generateRaceResults);
   const full: Championship = {
     id: 'rc-championship-2026',
     name: 'RC Championship 2026',
@@ -22,7 +24,8 @@ export function buildDemoChampionship(scenario: DemoScenario = 'after-race-3'): 
     pilots,
     tracks,
     races,
-    results: raceSpecs.map(generateRaceResults),
+    results,
+    feed: buildDemoFeed({ races, results, teams, pilots, rules: OFFICIAL_RULES }),
   };
   return applyDemoScenario(full, scenario);
 }

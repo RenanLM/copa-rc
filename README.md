@@ -5,7 +5,7 @@ Aplicativo mobile de acompanhamento de um campeonato de corridas de carros por c
 | Perfil | Persona | Situação |
 | --- | --- | --- |
 | Piloto | Lucas Ferreira, 24 anos, estudante de Engenharia | **Fases 1 a 3 entregues** (início, corridas, replay, desempenho, simulador, classificação, perfil) |
-| Espectadora | Mariana Costa, 29 anos, designer gráfica | Início, simulação ao vivo, resultado e pódio da etapa 4, classificação, feed e diretório implementados; feed por etapa/data, telemetria e publicações reais pendentes |
+| Espectadora | Mariana Costa, 29 anos, designer gráfica | Início, simulação ao vivo, resultado e pódio da etapa 4, classificação, feed por equipe e etapa (com a regra de 4 publicações) e diretório implementados; telemetria e publicações reais pendentes |
 
 > Todos os dados são **de demonstração** (pessoas, equipes, pistas, datas e tempos fictícios). O aplicativo sinaliza isso na interface.
 

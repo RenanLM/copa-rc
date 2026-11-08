@@ -76,3 +76,15 @@ export function initials(name: string): string {
     .map((part) => part[0]?.toUpperCase() ?? '')
     .join('');
 }
+
+/**
+ * "2026-09-27T14:32" → "27 set · 14:32". Sem horário, só a data; sem valor, null.
+ * Lê os números do texto, então não depende do fuso do dispositivo.
+ */
+export function formatPostDate(publishedAt: string | undefined): string | null {
+  if (!publishedAt) return null;
+  const [date, time] = publishedAt.split('T');
+  if (!date) return null;
+  const day = formatShortDate(date);
+  return time ? `${day} · ${time.slice(0, 5)}` : day;
+}

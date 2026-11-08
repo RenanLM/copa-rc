@@ -1,3 +1,4 @@
+import { findFeedLimitViolations, POST_TIME_PATTERN } from './feed';
 import { finishedRaces } from './standings';
 import type { Championship } from './types';
 
@@ -64,6 +65,36 @@ export function validateChampionship(c: Championship): ValidationIssue[] {
     if (race.status === 'finished' && !c.results.some((r) => r.raceId === race.id)) {
       add('result-missing', `A etapa ${race.round} está finalizada, mas sem resultados.`);
     }
+  }
+  // Feed ----------------------------------------------------------------------
+  const teamIds = new Set(c.teams.map((t) => t.id));
+  const seenPosts = new Set<string>();
+  for (const post of c.feed) {
+    if (seenPosts.has(post.id)) add('post-duplicate', `Publicação repetida: ${post.id}.`);
+    seenPosts.add(post.id);
+    if (!teamIds.has(post.teamId)) add('post-team-unknown', `Publicação ${post.id} de equipe inexistente (${post.teamId}).`);
+    const race = c.races.find((r) => r.id === post.raceId);
+    if (!race) {
+      add('post-race-unknown', `Publicação ${post.id} de etapa inexistente (${post.raceId}).`);
+    } else if (race.status === 'scheduled') {
+      add('post-race-not-open', `Publicação ${post.id}: a etapa ${race.round} ainda está agendada e não pode ter publicações.`);
+    }
+    for (const id of post.pilotIds ?? []) {
+      if (!pilotIds.has(id)) add('post-pilot-unknown', `Publicação ${post.id} cita piloto inexistente (${id}).`);
+    }
+    if (post.publishedAt !== undefined) {
+      if (!POST_TIME_PATTERN.test(post.publishedAt)) {
+        add('post-time-invalid', `Publicação ${post.id}: data e hora inválidas (${post.publishedAt}).`);
+      } else if (post.publishedAt.slice(0, 10) > c.referenceDate) {
+        add('post-in-future', `Publicação ${post.id} é posterior à data de referência (${c.referenceDate}).`);
+      }
+    }
+    if (c.source === 'demo' && !post.isDemo) {
+      add('post-not-flagged', `Publicação ${post.id} de um conjunto de demonstração deve estar marcada como demonstração.`);
+    }
+  }
+  for (const v of findFeedLimitViolations(c.feed, c.rules)) {
+    add('post-limit', `A equipe ${v.teamId} tem ${v.count} publicações na etapa ${v.raceId} (limite ${v.max}).`);
   }
   return issues;
 }

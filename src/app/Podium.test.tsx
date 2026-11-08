@@ -28,7 +28,7 @@ describe('etapa 4 → pódio: o fluxo da espectadora', () => {
     expect(screen.queryByRole('button', { name: 'Ver resultado e pódio' })).not.toBeInTheDocument();
 
     fireEvent.click(screen.getByRole('button', { name: /Ir para o final/ }));
-    const finished = await screen.findByRole('region', { name: /Bandeira quadriculada/ }, ready);
+    const finished = await screen.findByRole('region', { name: /Bandeira quadriculada/ }, { timeout: 8000 });
     // a simulação nunca é apresentada como resultado oficial: o botão é explícito
     expect(within(finished).getByText(/simulação da etapa 4 terminou/)).toBeInTheDocument();
 

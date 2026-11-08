@@ -5,6 +5,7 @@ import {
   formatGap,
   formatLapTime,
   formatLongDate,
+  formatPostDate,
   formatPoints,
   formatShortDate,
   initials,
@@ -55,6 +56,18 @@ describe('datas e contagem regressiva', () => {
     expect(formatCountdown(1)).toBe('Amanhã');
     expect(formatCountdown(0)).toBe('Hoje');
     expect(formatCountdown(-3)).toBe('Já ocorreu');
+  });
+});
+
+describe('formatPostDate', () => {
+  it('mostra data e hora quando existem, sem depender do fuso', () => {
+    expect(formatPostDate('2026-09-27T14:32')).toBe('27 set · 14:32');
+    expect(formatPostDate('2026-09-27T14:32:45')).toBe('27 set · 14:32');
+  });
+  it('mostra só a data quando não há horário e nada quando não há data', () => {
+    expect(formatPostDate('2026-09-27')).toBe('27 set');
+    expect(formatPostDate(undefined)).toBeNull();
+    expect(formatPostDate('')).toBeNull();
   });
 });
 

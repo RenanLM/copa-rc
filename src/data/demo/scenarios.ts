@@ -46,6 +46,18 @@ const REFERENCE_DATE: Record<DemoScenario, string> = {
   'after-race-4': '2026-10-26',
 };
 
+/**
+ * "Agora" da demonstração em cada momento (AAAA-MM-DDTHH:mm). O feed só mostra
+ * publicações feitas até este instante: no momento "após a etapa 3" ninguém
+ * publicou ainda sobre a etapa 4, e durante a etapa 4 só aparecem as postagens de
+ * antes da largada e as feitas enquanto ela acontece.
+ */
+const SCENARIO_NOW: Record<DemoScenario, string> = {
+  'after-race-3': '2026-10-21T12:00',
+  'race-4-live': '2026-10-25T09:25',
+  'after-race-4': '2026-10-26T10:00',
+};
+
 export function isDemoScenario(value: unknown): value is DemoScenario {
   return DEMO_SCENARIOS.some((s) => s.id === value);
 }
@@ -63,11 +75,14 @@ export function applyDemoScenario(full: Championship, scenario: DemoScenario): C
     return { ...race, status: 'scheduled' as const };
   });
   const finishedIds = new Set(races.filter((r) => r.status === 'finished').map((r) => r.id));
+  const now = SCENARIO_NOW[scenario];
   return {
     ...full,
     referenceDate: REFERENCE_DATE[scenario],
     races,
     results: full.results.filter((r) => finishedIds.has(r.raceId)),
+    // Sem data e hora não há como saber se já saiu: fica de fora do recorte.
+    feed: full.feed.filter((post) => post.publishedAt !== undefined && post.publishedAt <= now),
   };
 }
 

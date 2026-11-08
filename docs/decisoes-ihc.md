@@ -86,7 +86,7 @@ Documento vivo: cada fase acrescenta as decisões relevantes. Siglas: **B&S** = 
 | O placar mostra posição, nome, equipe, diferença estimada para o líder e volta; as linhas reordenam com animação, e setas indicam subida/descida. O controle permite pausar e retomar a simulação. | Guia de pista | B&S Carga de trabalho; N1; N3 Controle e liberdade; N8 Design minimalista |
 | A simulação fica identificada visualmente e é apresentada como conteúdo fictício; não se mistura com resultados finais nem com a classificação do campeonato. | Guia de pista | N1; N2 Correspondência com o mundo real; honestidade da informação |
 | Cor da equipe ajuda a reconhecer o carro, mas vem sempre junto de nome, número ou texto; a cor nunca é o único identificador. | Placar, Feed, Diretório | B&S Significado dos códigos; N6 Reconhecimento em vez de memorização; acessibilidade |
-| Feed de exemplos é filtrável por equipe. Ilustrações geradas pela interface têm rótulo próprio e não se passam por fotos ou publicações reais. O carrossel mostra parcialmente o próximo cartão como sinal de rolagem; a lista vertical mantém as publicações descobríveis. | Feed | B&S Condução; Gestalt — Continuidade e Fechamento; N1; honestidade da informação |
+| Ilustrações geradas pela interface têm rótulo próprio e não se passam por fotos ou publicações reais. O carrossel "Em destaque" foi retirado: repetia as mesmas publicações da lista e escondia conteúdo atrás de uma rolagem lateral. Veja a seção "Feed das equipes" abaixo. | Feed | B&S Condução; Gestalt — Continuidade e Fechamento; N1; honestidade da informação |
 | Diretório permite alternar entre pilotos e equipes e pesquisar nomes, equipe, cidade e número sem exigir memorização de identificadores. | Pilotos | N6 Reconhecimento em vez de memorização; N7 Flexibilidade e eficiência |
 | A classificação compartilhada explica pontos acumulados em linguagem de espectadora e mantém a opção entre pilotos e equipes. | Classificação | B&S Compatibilidade; N2; N6 |
 | Busca, filtros e cartões têm rótulos explícitos, feedback de lista vazia e alvos de toque de pelo menos 44 px. | Feed, Diretório | B&S Condução e Gestão de erros; N1; acessibilidade |
@@ -105,10 +105,29 @@ Documento vivo: cada fase acrescenta as decisões relevantes. Siglas: **B&S** = 
 | O início da espectadora mostra o **status** da etapa (Agendada, Em andamento, Finalizada) com selo, o resultado resumido quando acabou de terminar, o próximo evento, os líderes e "Como funciona o campeonato" com os valores lidos das regras. Status de etapa em andamento diz "Em andamento", não "Ao vivo". | Início da espectadora | N1; N2; N10 Ajuda e documentação |
 | Em telas estreitas a palavra "Championship" sai da barra superior para que o selo "Demo" nunca fique coberto: é a pista permanente de que os dados são fictícios. | Barra superior | N1; honestidade da informação |
 
+## Fase 4 — Feed das equipes
+
+Tarefa do enunciado: *encontrar as publicações de uma equipe durante a terceira etapa*.
+
+| Decisão | Onde | Critério |
+| --- | --- | --- |
+| Dois filtros que **se combinam**: equipe e etapa. Cada opção é um botão com o estado marcado (`aria-pressed`), e a tarefa se resolve em dois toques (equipe, depois etapa). | Feed | B&S Condução; N7 Flexibilidade e eficiência; N6 Reconhecimento em vez de memorização |
+| Cada filtro tem um rótulo próprio ("Equipe", "Etapa") e a primeira opção é sempre "Todas as…", que desfaz o filtro. "Limpar filtros" só aparece quando há filtro. | Feed | N3 Controle e liberdade; B&S Controle explícito |
+| Uma linha de resumo anuncia o resultado a cada mudança ("4 publicações · Torque Lab · etapa 3", ou "Mostrando 8 de 45"), em região de status para leitores de tela. | Feed | N1 Visibilidade do estado; B&S Feedback imediato |
+| **Estado vazio explicado**: "Aurora Speed não tem publicações na etapa 2", com dois caminhos de volta ("Ver todas as etapas de Aurora Speed" e "Limpar filtros"). Nunca uma lista em branco. | Feed | N9 Ajudar a reconhecer e se recuperar de erros; B&S Gestão de erros |
+| A regra de **4 publicações por equipe e etapa** é mostrada ao escolher uma equipe: "2 de 4" por etapa, barras de uso e o texto "limite atingido" (nunca só a cor). O limite vem do domínio e é verificado na validação dos dados. | Feed | N1; N10 Ajuda e documentação; B&S Significado dos códigos |
+| O feed mostra só o que já existe no **momento do campeonato**: após a etapa 3 não há nada sobre a etapa 4, e durante a etapa 4 não há resumos de resultado antes de ela acabar. Os resumos de resultado são gerados dos resultados oficiais. | Feed, dados | N2 Correspondência com o mundo real; honestidade da informação; B&S Homogeneidade e coerência |
+| Cada cartão mostra equipe (nome e cor), etapa (número e nome), tipo em texto com ícone (Resultado, Acontecimento, Pilotos, Bastidores), **data e hora quando existem** (nada é inventado quando faltam), título, texto e pilotos citados. | Feed | N6; B&S Significado dos códigos; Gestalt — Proximidade |
+| **Selo "Demonstração" em cada publicação**, além do aviso no topo e do rótulo "Arte demonstrativa" na ilustração, para o conteúdo não ser confundido com publicações reais mesmo quando um cartão aparece isolado. | Feed | Honestidade da informação; N1 |
+| Lista paginada em lotes de 8 com "Mostrar mais publicações (n)" informando quantas faltam; trocar de filtro volta ao primeiro lote. Mais recentes primeiro. | Feed | B&S Carga de trabalho; N7 |
+| As etapas **quebram de linha** (são poucas) e as equipes rolam de lado com o fim esmaecido, para não gastar a tela do celular; nenhuma opção fica fora do alcance. Alvos de pelo menos 44 px. | Feed | B&S Carga de trabalho; acessibilidade |
+
 ## Pendências para as próximas fases
 
 - Conectar telemetria autorizada para substituir a simulação acadêmica pelo placar realmente ao vivo, informando atualização e perda de sinal.
-- Substituir posts e ilustrações de exemplo por publicações e imagens fornecidas pelas equipes, com autoria, etapa e data.
+- Substituir posts e ilustrações de exemplo por publicações e imagens fornecidas pelas equipes, com autoria; a data e a hora já são exibidas quando existem.
+- Definir com a organização o que acontece quando uma equipe tenta passar de 4 publicações por etapa (a interface só exibe a cota; quem publica ainda não existe no aplicativo).
+- Testar com usuários se dois filtros em chips bastam ou se a espectadora espera também buscar por texto ou por piloto.
 - Revisar contraste dos textos terciários (`--text-3`) na Fase 6.
 - Validar a navegação e os fluxos da Mariana em teste de usabilidade na arquibancada, incluindo tela pequena, brilho alto e ruído.
 - Avaliar em teste com usuários se a pista animada precisa de números nos carros (hoje só o piloto em foco e o selecionado têm etiqueta).

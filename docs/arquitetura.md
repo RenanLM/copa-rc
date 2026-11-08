@@ -23,7 +23,7 @@ src/
     standings.ts   classificação de pilotos e equipes, histórico, desempate configurável
     laps.ts        melhor volta, total de voltas, diferença para o vencedor
     pilot-summary.ts  tudo o que o painel de um piloto precisa
-    feed.ts        limite de publicações por equipe e prova
+    feed.ts        publicações: limite por equipe e prova, cota, filtro por equipe e etapa, ordem
     validation.ts  invariantes do campeonato
     model.ts       índices + classificações calculadas UMA vez
     track-geometry.ts  curva fechada da pista (Catmull-Rom) e ponto na fração da volta
@@ -176,6 +176,16 @@ Piloto e espectadora precisam enxergar **a mesma temporada**. Para isso os dados
 
 A página de resultado (`features/results`) é pensada para quem acompanha de fora: pódio com revelação animada (3º, 2º e depois 1º; medalha sempre acompanhada de número e texto), destaques em frases, classificação da etapa com pontos e "Como ficou o campeonato", que mostra a classificação de antes e reordena as linhas até a de depois quando o quadro aparece na tela. Com movimento reduzido tudo aparece direto.
 
+### Feed das equipes
+
+As publicações fazem parte do campeonato (`Championship.feed`), então o feed lê o **mesmo modelo** das demais telas e nunca contradiz os resultados.
+
+- **Modelo** (`FeedPost`): equipe, etapa, tipo (`result`, `event`, `pilots`, `behind-the-scenes`), título, texto, pilotos citados, texto alternativo da imagem, `isDemo` e `publishedAt` (AAAA-MM-DDTHH:mm, **opcional**: a tela só mostra data e hora quando existem).
+- **Regras no domínio** (`feed.ts`): `feedQuota` (uso da cota "n de 4"), `filterFeed` (equipe **e** etapa combinadas), `sortFeed` (mais recentes primeiro; sem data vai para o fim) e `racesWithPosts`. O limite de 4 vem de `OFFICIAL_RULES`; nenhuma tela o repete.
+- **Validação** (`validateChampionship`): id repetido, equipe/etapa/piloto inexistente, etapa ainda agendada, data inválida ou posterior à data de referência, publicação de conjunto de demonstração sem a marca de demonstração e **mais de 4 por equipe e etapa**.
+- **Dados de demonstração** (`src/data/demo/feed-seed.ts`): 54 publicações. As de bastidores, pilotos e acontecimentos são escritas à mão, sem citar tempos nem colocações que não estejam nos resultados; os **resumos de resultado são gerados** a partir dos resultados e das regras de pontos (uma por equipe que pontuou na etapa), então o texto sempre bate com a classificação. Torque Lab (etapas 3 e 4) e Vortex (etapa 4) chegam ao limite de 4, o que exercita o aviso na tela.
+- **Visibilidade por momento**: cada momento do campeonato tem um "agora" (`SCENARIO_NOW`) e só entram as publicações feitas até ele. Após a etapa 3 há 38 publicações, nenhuma sobre a etapa 4; com a etapa 4 em andamento há 45 (só as de antes e durante a largada, sem resumos de resultado); após a etapa 4 há as 54.
+
 ## 8. Roadmap
 
 | Fase | Conteúdo | Situação |
@@ -183,7 +193,7 @@ A página de resultado (`features/results`) é pensada para quem acompanha de fo
 | 1 | Identidade, navegação, painel de Lucas, resultados da etapa 3, classificação | **Concluída** |
 | 2 | Race Replay, gráficos animados, baterias, comparativo entre etapas | **Concluída** |
 | 3 | Race Predictor (simulador) | **Concluída** |
-| 4 | Experiência de Mariana: início, ao vivo, resultado e pódio, classificação, feed e diretório | **Em andamento**: início, simulação ao vivo, resultado da etapa 4 com pódio, classificação e diretório prontos; faltam feed por etapa/data com limite de 4 publicações por equipe e prova, e fontes reais (telemetria, publicações) |
+| 4 | Experiência de Mariana: início, ao vivo, resultado e pódio, classificação, feed e diretório | **Interface concluída com dados demonstrativos**: início, simulação ao vivo, resultado da etapa 4 com pódio, classificação, feed por equipe e etapa (com a regra de 4 publicações) e diretório; faltam fontes reais (telemetria, publicações e imagens das equipes) |
 | 5 | Probabilidades de título (cálculo determinístico, depois Monte Carlo se justificável) | Pendente |
 | 6 | Missões de usabilidade, acessibilidade, desempenho | Pendente |
 
@@ -191,4 +201,4 @@ A página de resultado (`features/results`) é pensada para quem acompanha de fo
 
 As telas de Mariana priorizam leitura rápida e reconhecimento visual na arquibancada. O **início** mostra o status real da etapa do momento (agendada, em andamento ou finalizada), o resultado resumido quando ela acaba de terminar, o próximo evento, os líderes (pilotos e equipes) e uma explicação do campeonato lida das regras oficiais. A aba **"Ao Vivo"**, com a etapa em andamento, mostra uma **simulação** (nunca "transmissão"): carros no traçado, placar que reordena nas ultrapassagens e controles de pausar, reiniciar, velocidade e "ir para o final". Ela usa as voltas da etapa 4 e termina exatamente no resultado oficial; ao fim, um botão explícito leva ao resultado e ao pódio e a classificação do campeonato passa a refletir a etapa. Sem etapa em andamento, a aba explica isso e oferece a simulação como recurso de demonstração.
 
-O conjunto atual não contém posições reais dos carros, publicações nem fotografias fornecidas pelas equipes: a simulação é uma reprodução dos dados fictícios, rotulada como "Simulação ilustrativa". O feed e o diretório são navegáveis e filtráveis (o feed ainda só por equipe), e o conteúdo é identificado como demonstrativo. Para concluir a experiência real do cenário do PDF, falta integrar uma fonte autorizada de cronometragem e publicações e imagens das equipes, com estado de atualização e tratamento de perda de sinal.
+O conjunto atual não contém posições reais dos carros, publicações nem fotografias fornecidas pelas equipes: a simulação é uma reprodução dos dados fictícios, rotulada como "Simulação ilustrativa". O **feed** é filtrável por equipe e por etapa ao mesmo tempo, mostra quantas das 4 publicações permitidas cada equipe já usou em cada etapa e explica o estado vazio; o diretório é pesquisável. Todo o conteúdo é identificado como demonstrativo. Para concluir a experiência real do cenário do PDF, falta integrar uma fonte autorizada de cronometragem e publicações e imagens das equipes, com estado de atualização e tratamento de perda de sinal.

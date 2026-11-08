@@ -1,16 +1,9 @@
-import type { ChampionshipRules, RaceId, TeamId } from './types';
+import type { ChampionshipRules, FeedPost, RaceId, TeamId } from './types';
 
-/** Publicação de uma equipe no feed de uma etapa. */
-export interface FeedPost {
-  id: string;
-  teamId: TeamId;
-  raceId: RaceId;
-  /** ISO 8601, quando disponível. */
-  publishedAt?: string;
-  text: string;
-  /** Publicações de demonstração nunca são exibidas como conteúdo real. */
-  isDemo: boolean;
-}
+/**
+ * Regras do feed. A regra oficial, "cada equipe pode fazer até quatro publicações
+ * no feed de cada prova", vive aqui e em `OFFICIAL_RULES`: nenhuma tela a repete.
+ */
 
 export function postsCount(
   posts: readonly FeedPost[],
@@ -65,3 +58,62 @@ export function findFeedLimitViolations(
   }
   return [...counts.values()].filter((v) => v.count > v.max);
 }
+
+/** Uso da cota de uma equipe em uma etapa: "3 de 4". */
+export interface FeedQuota {
+  teamId: TeamId;
+  raceId: RaceId;
+  count: number;
+  max: number;
+  remaining: number;
+  /** Atingiu o limite: não pode mais publicar nesta etapa. */
+  full: boolean;
+}
+
+export function feedQuota(
+  posts: readonly FeedPost[],
+  teamId: TeamId,
+  raceId: RaceId,
+  rules: Pick<ChampionshipRules, 'maxPostsPerTeamPerRace'>,
+): FeedQuota {
+  const count = postsCount(posts, teamId, raceId);
+  const max = rules.maxPostsPerTeamPerRace;
+  return { teamId, raceId, count, max, remaining: Math.max(0, max - count), full: count >= max };
+}
+
+export interface FeedFilter {
+  /** null/ausente = todas as equipes. */
+  teamId?: TeamId | null;
+  /** null/ausente = todas as etapas. */
+  raceId?: RaceId | null;
+}
+
+/** Publicações que atendem aos DOIS filtros ao mesmo tempo. */
+export function filterFeed(posts: readonly FeedPost[], filter: FeedFilter): FeedPost[] {
+  return posts.filter(
+    (post) =>
+      (!filter.teamId || post.teamId === filter.teamId) &&
+      (!filter.raceId || post.raceId === filter.raceId),
+  );
+}
+
+/** Mais recentes primeiro. Sem data vai para o fim; empate de horário desempata pelo id. */
+export function sortFeed(posts: readonly FeedPost[]): FeedPost[] {
+  return [...posts].sort((a, b) => {
+    if (a.publishedAt && b.publishedAt) {
+      return b.publishedAt.localeCompare(a.publishedAt) || a.id.localeCompare(b.id);
+    }
+    if (a.publishedAt) return -1;
+    if (b.publishedAt) return 1;
+    return a.id.localeCompare(b.id);
+  });
+}
+
+/** Etapas que têm ao menos uma publicação, sem repetição, na ordem em que aparecem em `order`. */
+export function racesWithPosts(posts: readonly FeedPost[], order: readonly RaceId[]): RaceId[] {
+  const present = new Set(posts.map((p) => p.raceId));
+  return order.filter((id) => present.has(id));
+}
+
+/** Data e hora no formato aceito pelos dados: AAAA-MM-DDTHH:mm (ou com segundos). */
+export const POST_TIME_PATTERN = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(:\d{2})?$/;

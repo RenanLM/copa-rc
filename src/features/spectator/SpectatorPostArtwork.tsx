@@ -1,19 +1,25 @@
 import type { CSSProperties } from 'react';
-import type { Team } from '@/domain';
+import type { PostKind, Team } from '@/domain';
+import { POST_KINDS } from './spectator-content';
 import styles from './SpectatorPostArtwork.module.css';
 
+/**
+ * Ilustração de uma publicação de demonstração. Não é foto de ninguém: o texto
+ * alternativo vem do dado e o selo "Arte demonstrativa" fica sempre visível.
+ */
 export function SpectatorPostArtwork({
   team,
   description,
-  compact = false,
+  kind,
 }: {
   team: Team;
   description: string;
-  compact?: boolean;
+  kind: PostKind;
 }) {
+  const { icon: Icon } = POST_KINDS[kind];
   return (
     <div
-      className={`${styles.artwork} ${compact ? styles.compact : ''}`}
+      className={styles.artwork}
       style={{ '--team': team.color } as CSSProperties}
       role="img"
       aria-label={`Ilustração demonstrativa: ${description}`}
@@ -31,6 +37,9 @@ export function SpectatorPostArtwork({
           <text x="48" y="37" textAnchor="middle">#{team.shortName}</text>
         </g>
       </svg>
+      <span className={styles.emblem} aria-hidden="true">
+        <Icon size={18} />
+      </span>
       <span className={styles.artLabel}>Arte demonstrativa</span>
     </div>
   );

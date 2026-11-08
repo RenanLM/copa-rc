@@ -1,109 +1,307 @@
 import { useMemo, useState } from 'react';
+import { Newspaper, ShieldCheck } from 'lucide-react';
 import { useModel } from '@/app/providers/ChampionshipProvider';
+import { Badge } from '@/components/ui/Badge';
+import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { PageHeader } from '@/components/ui/PageHeader';
+import { EmptyState } from '@/components/ui/StateViews';
+import {
+  feedQuota,
+  filterFeed,
+  sortFeed,
+  type ChampionshipModel,
+  type FeedPost,
+} from '@/domain';
+import { formatPostDate } from '@/lib/format';
 import { SpectatorPostArtwork } from './SpectatorPostArtwork';
-import { spectatorPosts } from './spectator-content';
+import { POST_KINDS } from './spectator-content';
 import styles from './SpectatorFeedPage.module.css';
 
+/** Quantas publicações aparecem por vez; "Mostrar mais" acrescenta outro lote. */
+const PAGE_SIZE = 8;
+
+const plural = (n: number, one: string, many: string) => `${n} ${n === 1 ? one : many}`;
+
+/**
+ * Feed das equipes. Responde à tarefa "encontrar as publicações de uma equipe
+ * durante a terceira etapa": filtros de equipe e de etapa combináveis, resultado
+ * contado, estado vazio explicado e a regra de 4 publicações por equipe e etapa
+ * à vista. Lê as publicações do mesmo modelo das demais telas, então só mostra o
+ * que já existe no momento escolhido para o campeonato.
+ */
 export function SpectatorFeedPage() {
   const model = useModel();
-  const [selectedTeam, setSelectedTeam] = useState<string>('all');
-  const posts = useMemo(
-    () => spectatorPosts.filter((post) => selectedTeam === 'all' || post.teamId === selectedTeam),
-    [selectedTeam],
+  const { championship } = model;
+  const { feed, rules } = championship;
+
+  const [teamId, setTeamId] = useState<string | null>(null);
+  const [selectedRaceId, setSelectedRaceId] = useState<string | null>(null);
+  const [visible, setVisible] = useState(PAGE_SIZE);
+
+  // Só etapas que já começaram têm feed; a lista acompanha o momento do campeonato.
+  const openRaces = useMemo(
+    () =>
+      championship.races
+        .filter((race) => race.status !== 'scheduled')
+        .sort((a, b) => a.round - b.round),
+    [championship.races],
   );
-  const featuredPosts = posts.slice(0, 3);
+  // Trocar de momento pode tirar do ar a etapa escolhida: volta a "todas".
+  const raceId = openRaces.some((race) => race.id === selectedRaceId) ? selectedRaceId : null;
+
+  const team = teamId ? model.teamsById.get(teamId) : undefined;
+  const race = raceId ? model.racesById.get(raceId) : undefined;
+  const filtered = useMemo(
+    () => sortFeed(filterFeed(feed, { teamId, raceId })),
+    [feed, teamId, raceId],
+  );
+  const shown = filtered.slice(0, visible);
+  const remaining = filtered.length - shown.length;
+  const filtering = Boolean(team || race);
+
+  const chooseTeam = (id: string | null) => {
+    setTeamId(id);
+    setVisible(PAGE_SIZE);
+  };
+  const chooseRace = (id: string | null) => {
+    setSelectedRaceId(id);
+    setVisible(PAGE_SIZE);
+  };
+  const clearFilters = () => {
+    chooseTeam(null);
+    chooseRace(null);
+  };
+
+  const quotaRaces = race ? [race] : openRaces;
 
   return (
     <>
       <PageHeader
         eyebrow="Bastidores do campeonato"
         title="Feed das equipes"
-        subtitle="Veja novidades e momentos das equipes entre uma etapa e outra."
+        subtitle="Encontre as publicações de uma equipe e de uma etapa."
       />
 
       <Card className={styles.notice}>
         <strong>Conteúdo de demonstração</strong>
-        <span>As publicações e ilustrações abaixo são exemplos; não foram enviadas pelas equipes.</span>
+        <span>
+          As publicações e ilustrações abaixo são fictícias; não foram enviadas pelas equipes. Cada
+          equipe pode publicar até {rules.maxPostsPerTeamPerRace} vezes por etapa.
+        </span>
       </Card>
 
-      <section className={styles.featured} aria-labelledby="featured-title">
-        <div className={styles.sectionHeading}>
-          <div>
-            <p className={styles.eyebrow}>Deslize para explorar</p>
-            <h2 id="featured-title">Em destaque</h2>
+      <section className={styles.filters} aria-label="Filtros do feed">
+        <div className={styles.filterGroup}>
+          <p className={styles.filterLabel} id="feed-filter-team">
+            Equipe
+          </p>
+          <div
+            className={`${styles.chips} ${styles.chipsScroll}`}
+            role="group"
+            aria-labelledby="feed-filter-team"
+          >
+            <button
+              type="button"
+              className={!team ? styles.chipActive : styles.chip}
+              aria-pressed={!team}
+              onClick={() => chooseTeam(null)}
+            >
+              Todas as equipes
+            </button>
+            {championship.teams.map((t) => (
+              <button
+                type="button"
+                key={t.id}
+                className={teamId === t.id ? styles.chipActive : styles.chip}
+                aria-pressed={teamId === t.id}
+                onClick={() => chooseTeam(t.id)}
+              >
+                <span className={styles.swatch} style={{ backgroundColor: t.color }} aria-hidden="true" />
+                {t.name}
+              </button>
+            ))}
           </div>
-          <span className={styles.peekHint} aria-hidden="true">›</span>
         </div>
-        <div className={styles.carousel} aria-label="Publicações em destaque">
-          {featuredPosts.length > 0 ? featuredPosts.map((post) => {
-            const team = model.teamsById.get(post.teamId);
-            if (!team) return null;
-            return (
-              <article className={styles.featureCard} key={post.id}>
-                <SpectatorPostArtwork team={team} description={post.artworkDescription} compact />
-                <p className={styles.featureTeam}>{team.name}</p>
-                <h3>{post.title}</h3>
-              </article>
-            );
-          }) : <p className={styles.empty}>Nenhuma publicação para esta equipe.</p>}
+
+        <div className={styles.filterGroup}>
+          <p className={styles.filterLabel} id="feed-filter-race">
+            Etapa
+          </p>
+          <div
+            className={`${styles.chips} ${styles.chipsWrap}`}
+            role="group"
+            aria-labelledby="feed-filter-race"
+          >
+            <button
+              type="button"
+              className={!race ? styles.chipActive : styles.chip}
+              aria-pressed={!race}
+              onClick={() => chooseRace(null)}
+            >
+              Todas as etapas
+            </button>
+            {openRaces.map((r) => (
+              <button
+                type="button"
+                key={r.id}
+                className={raceId === r.id ? styles.chipActive : styles.chip}
+                aria-pressed={raceId === r.id}
+                onClick={() => chooseRace(r.id)}
+              >
+                Etapa {r.round}
+              </button>
+            ))}
+          </div>
         </div>
       </section>
 
-      <section className={styles.timeline} aria-labelledby="timeline-title">
-        <div className={styles.sectionHeading}>
-          <div>
-            <p className={styles.eyebrow}>Novidades</p>
-            <h2 id="timeline-title">Publicações</h2>
-          </div>
-          <span className={styles.count}>{posts.length}</span>
+      {team && (
+        <section className={styles.quota} aria-labelledby="feed-quota-title">
+          <h2 className={styles.quotaTitle} id="feed-quota-title">
+            <ShieldCheck size={16} aria-hidden="true" />
+            Limite de publicações · {team.name}
+          </h2>
+          <ul className={styles.quotaList}>
+            {quotaRaces.map((r) => {
+              const quota = feedQuota(feed, team.id, r.id, rules);
+              return (
+                <li className={styles.quotaItem} key={r.id} data-full={quota.full || undefined}>
+                  <span>Etapa {r.round}</span>
+                  <span className={styles.pips} aria-hidden="true">
+                    {Array.from({ length: quota.max }, (_, i) => (
+                      <span className={i < quota.count ? styles.pipOn : styles.pip} key={i} />
+                    ))}
+                  </span>
+                  <strong>
+                    {quota.count} de {quota.max}
+                  </strong>
+                  {quota.full && <span className={styles.quotaFull}>limite atingido</span>}
+                </li>
+              );
+            })}
+          </ul>
+        </section>
+      )}
+
+      <section aria-labelledby="feed-list-title" className={styles.timeline}>
+        <div className={styles.summaryRow}>
+          <h2 className={styles.summaryTitle} id="feed-list-title">
+            Publicações
+          </h2>
+          <p className={styles.summary} role="status">
+            {summaryText({ total: filtered.length, shown: shown.length, team: team?.name, round: race?.round })}
+          </p>
+          {filtering && (
+            <Button variant="ghost" size="small" onClick={clearFilters}>
+              Limpar filtros
+            </Button>
+          )}
         </div>
 
-        <div className={styles.filters} role="group" aria-label="Filtrar publicações por equipe">
-          <button
-            type="button"
-            className={selectedTeam === 'all' ? styles.filterActive : styles.filter}
-            aria-pressed={selectedTeam === 'all'}
-            onClick={() => setSelectedTeam('all')}
-          >
-            Todas
-          </button>
-          {model.championship.teams.map((team) => (
-            <button
-              type="button"
-              key={team.id}
-              className={selectedTeam === team.id ? styles.filterActive : styles.filter}
-              aria-pressed={selectedTeam === team.id}
-              onClick={() => setSelectedTeam(team.id)}
-            >
-              {team.name}
-            </button>
-          ))}
-        </div>
-
-        <div className={styles.posts}>
-          {posts.map((post) => {
-            const team = model.teamsById.get(post.teamId);
-            if (!team) return null;
-            return (
-              <Card as="article" flush className={styles.post} key={post.id}>
-                <SpectatorPostArtwork team={team} description={post.artworkDescription} />
-                <div className={styles.postBody}>
-                  <div className={styles.postMeta}>
-                    <span className={styles.teamSwatch} style={{ backgroundColor: team.color }} aria-hidden="true" />
-                    <strong>{team.name}</strong>
-                    <span aria-hidden="true">·</span>
-                    <span>Etapa {post.raceRound}</span>
+        {filtered.length === 0 ? (
+          <Card>
+            <EmptyState
+              icon={Newspaper}
+              title={filtering ? 'Nenhuma publicação com esses filtros' : 'Ainda não há publicações'}
+              message={emptyMessage({ filtering, team: team?.name, round: race?.round })}
+              action={
+                filtering ? (
+                  <div className={styles.emptyActions}>
+                    {team && race && (
+                      <Button variant="primary" onClick={() => chooseRace(null)}>
+                        Ver todas as etapas de {team.name}
+                      </Button>
+                    )}
+                    <Button variant={team && race ? 'secondary' : 'primary'} onClick={clearFilters}>
+                      Limpar filtros
+                    </Button>
                   </div>
-                  <h3>{post.title}</h3>
-                  <p>{post.message}</p>
-                </div>
-              </Card>
-            );
-          })}
-        </div>
+                ) : undefined
+              }
+            />
+          </Card>
+        ) : (
+          <>
+            <ul className={styles.posts}>
+              {shown.map((post) => (
+                <li key={post.id}>
+                  <PostCard post={post} model={model} />
+                </li>
+              ))}
+            </ul>
+            {remaining > 0 && (
+              <Button className={styles.more} onClick={() => setVisible((n) => n + PAGE_SIZE)}>
+                Mostrar mais publicações ({remaining})
+              </Button>
+            )}
+          </>
+        )}
       </section>
     </>
   );
+}
+
+/** Uma publicação: equipe, etapa, tipo, data e hora (quando existem), texto e pilotos citados. */
+function PostCard({ post, model }: { post: FeedPost; model: ChampionshipModel }) {
+  const team = model.teamsById.get(post.teamId);
+  const race = model.racesById.get(post.raceId);
+  if (!team || !race) return null;
+  const kind = POST_KINDS[post.kind];
+  const KindIcon = kind.icon;
+  const when = formatPostDate(post.publishedAt);
+  const pilotNames = (post.pilotIds ?? [])
+    .map((id) => model.pilotsById.get(id)?.name)
+    .filter((name): name is string => Boolean(name));
+  const titleId = `post-title-${post.id}`;
+  return (
+    <Card as="article" flush className={styles.post} aria-labelledby={titleId}>
+      <SpectatorPostArtwork team={team} description={post.imageAlt} kind={post.kind} />
+      <div className={styles.postBody}>
+        <div className={styles.postMeta}>
+          <span className={styles.swatch} style={{ backgroundColor: team.color }} aria-hidden="true" />
+          <strong>{team.name}</strong>
+          <span aria-hidden="true">·</span>
+          <span>
+            Etapa {race.round} · {race.name}
+          </span>
+        </div>
+        <div className={styles.postTags}>
+          <Badge tone="soft">
+            <KindIcon size={12} aria-hidden="true" />
+            {kind.label}
+          </Badge>
+          {post.isDemo && <Badge tone="data">Demonstração</Badge>}
+          {when && post.publishedAt && (
+            <time className={styles.when} dateTime={post.publishedAt}>
+              {when}
+            </time>
+          )}
+        </div>
+        <h3 id={titleId}>{post.title}</h3>
+        <p>{post.text}</p>
+        {pilotNames.length > 0 && (
+          <p className={styles.pilots}>
+            <span className={styles.pilotsLabel}>Pilotos citados:</span> {pilotNames.join(', ')}
+          </p>
+        )}
+      </div>
+    </Card>
+  );
+}
+
+function summaryText(args: { total: number; shown: number; team?: string; round?: number }): string {
+  const { total, shown, team, round } = args;
+  const scope = [team, round ? `etapa ${round}` : null].filter(Boolean).join(' · ');
+  const count =
+    total > shown ? `Mostrando ${shown} de ${total} publicações` : plural(total, 'publicação', 'publicações');
+  return scope ? `${count} · ${scope}` : count;
+}
+
+function emptyMessage(args: { filtering: boolean; team?: string; round?: number }): string {
+  const { filtering, team, round } = args;
+  if (!filtering) return 'Quando as equipes publicarem, as novidades aparecem aqui.';
+  if (team && round) return `${team} não tem publicações na etapa ${round}. Veja as outras etapas ou limpe os filtros.`;
+  if (team) return `${team} ainda não publicou no feed.`;
+  return `Ninguém publicou na etapa ${round} até agora.`;
 }
