@@ -4,29 +4,18 @@
   gap: var(--sp-3);
 }
 
+/* Um único bloco de aviso: selo, estado da simulação e uma frase. */
+.notice {
+  display: grid;
+  gap: var(--sp-2);
+}
+
 .topline {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: var(--sp-2);
-}
-
-.event {
-  display: grid;
-  justify-items: start;
-  gap: 5px;
-  min-width: 0;
-}
-
-.eventName {
-  overflow: hidden;
-  max-width: 100%;
-  color: var(--text-2);
-  font-size: var(--fs-xs);
-  font-weight: 700;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 .livePill {
@@ -57,7 +46,7 @@
 
 .disclaimer,
 .controlHint,
-.footnote {
+.boardHint {
   color: var(--text-2);
   font-size: var(--fs-sm);
   line-height: 1.45;
@@ -114,25 +103,17 @@
   font-weight: 700;
 }
 
-.speedRow {
-  display: grid;
-  gap: 4px;
-}
-
-.speedLabel {
-  color: var(--text-2);
-  font-size: var(--fs-xs);
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
 .leaderboardHeading {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: var(--sp-2);
   padding: var(--sp-4) var(--sp-3) var(--sp-2);
+}
+
+.boardHint {
+  margin: 0;
+  padding: 0 var(--sp-3) var(--sp-3);
 }
 
 .eyebrow {

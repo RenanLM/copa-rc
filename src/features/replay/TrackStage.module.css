@@ -57,6 +57,12 @@
   stroke-width: 2;
 }
 
+.favoriteRing {
+  fill: none;
+  stroke: var(--nav-active);
+  stroke-width: 2;
+}
+
 .tag text {
   font-family: var(--font-display);
   font-weight: 700;
@@ -76,7 +82,7 @@
 .hudLabel {
   display: block;
   color: var(--text-2);
-  font-size: 0.625rem;
+  font-size: var(--fs-xs);
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;

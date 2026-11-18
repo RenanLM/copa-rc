@@ -7,7 +7,7 @@
 | **React 19 + TypeScript + Vite** | Componentização e tipagem estática; ciclo de desenvolvimento rápido. |
 | **PWA mobile-first** (HashRouter) | Roda em qualquer celular por um endereço, sem instalar nada: ideal para aplicar as missões de usabilidade com várias pessoas. Rotas por *hash* funcionam em hospedagem estática. |
 | **`motion`** | Animações de layout e entrada, com suporte nativo a `prefers-reduced-motion`. |
-| **CSS Modules + tokens** | Estilo local por componente; toda cor, espaçamento e duração vem de `src/styles/tokens.css`. |
+| **CSS Modules + tokens** | Estilo local por componente; toda cor, espaçamento e duração vem de `src/styles/tokens.css`. Cores de texto têm tokens próprios (`--accent-text`, `--data-text`, `--text-3`), com contraste mínimo de 4,5:1 nos dois temas, guardado por `tokens.test.ts`. |
 | **`lucide-react`** | Conjunto único de ícones, traço consistente. |
 | **Vitest + Testing Library** | Testes do domínio (regras) e da interface. |
 
@@ -186,6 +186,10 @@ As publicações fazem parte do campeonato (`Championship.feed`), então o feed 
 - **Dados de demonstração** (`src/data/demo/feed-seed.ts`): 54 publicações. As de bastidores, pilotos e acontecimentos são escritas à mão, sem citar tempos nem colocações que não estejam nos resultados; os **resumos de resultado são gerados** a partir dos resultados e das regras de pontos (uma por equipe que pontuou na etapa), então o texto sempre bate com a classificação. Torque Lab (etapas 3 e 4) e Vortex (etapa 4) chegam ao limite de 4, o que exercita o aviso na tela.
 - **Visibilidade por momento**: cada momento do campeonato tem um "agora" (`SCENARIO_NOW`) e só entram as publicações feitas até ele. Após a etapa 3 há 38 publicações, nenhuma sobre a etapa 4; com a etapa 4 em andamento há 45 (só as de antes e durante a largada, sem resumos de resultado); após a etapa 4 há as 54.
 
+### Pilotos preferidos (Ao Vivo)
+
+`src/lib/favorite-pilots.ts` guarda até 3 pilotos que a espectadora escolheu acompanhar: só no aparelho (`localStorage`, chave `rcc:favorite-pilots`), sem conta, com fallback em memória se o armazenamento estiver bloqueado e leitura tolerante a dados inválidos (repetidos, em excesso, fora do formato). `useFavoritePilots()` entrega a lista de forma estável (`useSyncExternalStore`) e acompanha mudanças de outras abas. O `Leaderboard` e a `TrackStage` são compartilhados com o replay do piloto e só mostram estrela, faixa e anel quando recebem os preferidos (`favoritePilotIds`, `onToggleFavorite`, `favoriteIds`); sem eles, nada muda no replay. A faixa "Seus pilotos" (`features/spectator/FavoritePilots`) lê a posição de cada preferido do mesmo retrato da corrida que o placar usa.
+
 ## 8. Roadmap
 
 | Fase | Conteúdo | Situação |
@@ -199,6 +203,6 @@ As publicações fazem parte do campeonato (`Championship.feed`), então o feed 
 
 ### Experiência da espectadora
 
-As telas de Mariana priorizam leitura rápida e reconhecimento visual na arquibancada. O **início** mostra o status real da etapa do momento (agendada, em andamento ou finalizada), o resultado resumido quando ela acaba de terminar, o próximo evento, os líderes (pilotos e equipes) e uma explicação do campeonato lida das regras oficiais. A aba **"Ao Vivo"**, com a etapa em andamento, mostra uma **simulação** (nunca "transmissão"): carros no traçado, placar que reordena nas ultrapassagens e controles de pausar, reiniciar, velocidade e "ir para o final". Ela usa as voltas da etapa 4 e termina exatamente no resultado oficial; ao fim, um botão explícito leva ao resultado e ao pódio e a classificação do campeonato passa a refletir a etapa. Sem etapa em andamento, a aba explica isso e oferece a simulação como recurso de demonstração.
+As telas de Mariana priorizam leitura rápida e reconhecimento visual na arquibancada. O **início** mostra o status real da etapa do momento (agendada, em andamento ou finalizada), o resultado resumido quando ela acaba de terminar, o próximo evento, os líderes (pilotos e equipes) e uma explicação do campeonato lida das regras oficiais. A aba **"Ao Vivo"**, com a etapa em andamento, mostra (nesta ordem) o aviso de simulação, a pista, a faixa "Seus pilotos", o placar e, por último, os controles da demonstração; mostra uma **simulação** (nunca "transmissão"): carros no traçado, placar que reordena nas ultrapassagens e controles de demonstração (pausar, reiniciar e "ir para o final"; sem escolha de velocidade: uma etapa em andamento não se acelera, então roda em 1×). Ela usa as voltas da etapa 4 e termina exatamente no resultado oficial; ao fim, um botão explícito leva ao resultado e ao pódio e a classificação do campeonato passa a refletir a etapa. Sem etapa em andamento, a aba explica isso e oferece a simulação como recurso de demonstração.
 
 O conjunto atual não contém posições reais dos carros, publicações nem fotografias fornecidas pelas equipes: a simulação é uma reprodução dos dados fictícios, rotulada como "Simulação ilustrativa". O **feed** é filtrável por equipe e por etapa ao mesmo tempo, mostra quantas das 4 publicações permitidas cada equipe já usou em cada etapa e explica o estado vazio; o diretório é pesquisável. Todo o conteúdo é identificado como demonstrativo. Para concluir a experiência real do cenário do PDF, falta integrar uma fonte autorizada de cronometragem e publicações e imagens das equipes, com estado de atualização e tratamento de perda de sinal.

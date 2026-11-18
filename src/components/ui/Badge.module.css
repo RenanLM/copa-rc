@@ -23,7 +23,7 @@
 .data {
   background: var(--data-soft);
   border-color: color-mix(in srgb, var(--data) 45%, transparent);
-  color: var(--data);
+  color: var(--data-text);
 }
 
 .alert {

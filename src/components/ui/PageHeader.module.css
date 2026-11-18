@@ -20,7 +20,7 @@
 
 .eyebrow {
   margin-bottom: 2px;
-  color: var(--data);
+  color: var(--data-text);
   font-size: var(--fs-xs);
   font-weight: 700;
   letter-spacing: 0.1em;

@@ -62,7 +62,7 @@
 
 .tie {
   margin-left: 1px;
-  color: var(--data);
+  color: var(--data-text);
   font-size: var(--fs-sm);
 }
 

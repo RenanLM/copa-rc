@@ -30,7 +30,7 @@
   height: 42px;
   border-radius: 12px;
   background: var(--data-soft);
-  color: var(--data);
+  color: var(--data-text);
 }
 
 .eyebrow {

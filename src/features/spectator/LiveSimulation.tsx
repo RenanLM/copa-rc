@@ -4,17 +4,24 @@ import { useReducedMotion } from 'motion/react';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { ProvenanceBadge } from '@/components/ui/ProvenanceBadge';
-import { SegmentedControl } from '@/components/ui/SegmentedControl';
 import type { ChampionshipModel, PilotId, Race, ReplayModel } from '@/domain';
 import { Leaderboard } from '@/features/replay/Leaderboard';
 import type { ReplayPlayer, ReplaySpeed } from '@/features/replay/ReplayPlayer';
 import { StageHeader } from '@/features/replay/StageHud';
 import { TrackStage, type StageCar } from '@/features/replay/TrackStage';
 import { usePlayerState, useReplayPlayer, useSnapshot } from '@/features/replay/useReplayPlayer';
+import { MAX_FAVORITE_PILOTS, toggleFavoritePilot, useFavoritePilots } from '@/lib/favorite-pilots';
+import { FavoritePilots } from './FavoritePilots';
 import styles from './LiveSimulation.module.css';
 
-const SPEEDS: readonly ReplaySpeed[] = [2, 4, 8];
-const SPEED_OPTIONS = SPEEDS.map((s) => ({ value: String(s), label: `${s}×` }));
+/**
+ * Uma etapa em andamento acontece em tempo real: a simulação roda em 1× e a
+ * espectadora não muda a velocidade (só "Ir para o final", para a demonstração).
+ */
+const LIVE_SPEED: ReplaySpeed = 1;
+
+/** Quanto tempo o aviso de limite de preferidos fica na tela. */
+const NOTICE_MS = 6000;
 
 interface LiveSimulationProps {
   model: ChampionshipModel;
@@ -29,9 +36,13 @@ interface LiveSimulationProps {
  * Acompanhamento da etapa para quem está de fora. Hoje é uma SIMULAÇÃO: usa as
  * voltas da etapa e termina exatamente no resultado que depois alimenta a
  * classificação. Nunca é apresentada como transmissão ao vivo.
+ *
+ * Ordem da tela, do que mais interessa a quem está na arquibancada ao que só
+ * serve à demonstração: aviso, pista, "Seus pilotos", placar e, por último, os
+ * controles da demonstração.
  */
 export function LiveSimulation({ model, race, replay, onShowResult }: LiveSimulationProps) {
-  const player = useReplayPlayer(replay);
+  const player = useReplayPlayer(replay, LIVE_SPEED);
   if (!player) return null;
   return <LiveStage model={model} race={race} replay={replay} player={player} onShowResult={onShowResult} />;
 }
@@ -49,6 +60,8 @@ function LiveStage({
   const track = model.tracksById.get(race.trackId);
   const [selectedPilotId, setSelectedPilotId] = useState<PilotId | null>(null);
   const [announcement, setAnnouncement] = useState('');
+  const [favoriteNotice, setFavoriteNotice] = useState('');
+  const favoriteIds = useFavoritePilots().filter((id) => model.pilotsById.has(id));
 
   const cars: StageCar[] = replay.cars.flatMap((car) => {
     const pilot = model.pilotsById.get(car.pilotId);
@@ -65,38 +78,55 @@ function LiveStage({
     if (state.ended) setAnnouncement('Simulação encerrada. O resultado e o pódio já podem ser vistos.');
   }, [state.ended]);
 
+  useEffect(() => {
+    if (!favoriteNotice) return;
+    const timer = setTimeout(() => setFavoriteNotice(''), NOTICE_MS);
+    return () => clearTimeout(timer);
+  }, [favoriteNotice]);
+
   const getPilot = (pilotId: PilotId) => {
     const pilot = model.pilotsById.get(pilotId);
     const team = pilot && model.teamsById.get(pilot.teamId);
     return pilot && team ? { pilot, team } : undefined;
   };
 
-  const status = state.ended ? 'Simulação encerrada' : state.playing ? 'Simulação em andamento' : 'Simulação pausada';
+  const toggleFavorite = (pilotId: PilotId) => {
+    const name = model.pilotsById.get(pilotId)?.name ?? 'Piloto';
+    const result = toggleFavoritePilot(pilotId);
+    if (result === 'full') {
+      // O aviso visível já é uma região de status: leitores de tela o anunciam sozinhos.
+      setFavoriteNotice(`Você já acompanha ${MAX_FAVORITE_PILOTS} pilotos. Toque na estrela de um deles para trocar.`);
+      return;
+    }
+    setFavoriteNotice('');
+    setAnnouncement(result === 'added' ? `${name} agora está entre os seus pilotos.` : `${name} saiu dos seus pilotos.`);
+  };
+
+  // O selo ao lado já diz "Simulação ilustrativa": aqui só o estado, para não repetir a palavra.
+  const status = state.ended ? 'Encerrada' : state.playing ? 'Em andamento' : 'Pausada';
 
   return (
     <div className={styles.wrap}>
-      <div className={styles.topline}>
-        <div className={styles.event}>
+      <div className={styles.notice}>
+        <div className={styles.topline}>
           <ProvenanceBadge kind="simulation" />
-          <span className={styles.eventName}>
-            Etapa {race.round} · {race.name}
+          <span className={`${styles.livePill} ${state.playing ? styles.pulsing : ''}`} role="status">
+            <span className={styles.liveDot} aria-hidden="true" />
+            <span className="sr-only">Simulação </span>
+            {status}
           </span>
         </div>
-        <span className={`${styles.livePill} ${state.playing ? styles.pulsing : ''}`} role="status">
-          <span className={styles.liveDot} aria-hidden="true" />
-          {status}
-        </span>
+        <p className={styles.disclaimer}>
+          Etapa {race.round} · {race.name}. Posições, tempos e ultrapassagens são fictícios.
+        </p>
       </div>
-      <p className={styles.disclaimer}>
-        Etapa {race.round} simulada para esta demonstração. Posições, tempos e ultrapassagens são fictícios e não vêm de
-        uma transmissão real.
-      </p>
 
       <TrackStage
         player={player}
         track={track}
         cars={cars}
         selectedPilotId={selectedPilotId}
+        favoriteIds={favoriteIds}
         label={`Simulação da etapa ${race.round}, ${race.name}. ${cars.length} carros percorrem a pista; a ordem atual aparece no placar abaixo.`}
         header={<StageHeader player={player} totalLaps={replay.totalLaps} />}
       />
@@ -115,11 +145,50 @@ function LiveStage({
         </Card>
       )}
 
+      <FavoritePilots
+        model={model}
+        snapshot={snapshot}
+        favoriteIds={favoriteIds}
+        selectedPilotId={selectedPilotId}
+        onSelect={setSelectedPilotId}
+        onToggleFavorite={toggleFavorite}
+        notice={favoriteNotice}
+      />
+
+      <Card flush aria-labelledby="spectator-live-standings">
+        <div className={styles.leaderboardHeading}>
+          <div>
+            <p className={styles.eyebrow}>
+              Etapa {race.round} · {race.name}
+            </p>
+            <h2 id="spectator-live-standings">Posições na pista</h2>
+          </div>
+          <span className={styles.lapCount}>
+            Volta {snapshot.leaderLap}/{replay.totalLaps}
+          </span>
+        </div>
+        <p className={styles.boardHint}>
+          Toque na estrela para acompanhar um piloto. Toque no nome para ver o carro na pista.
+        </p>
+        <Leaderboard
+          player={player}
+          totalLaps={replay.totalLaps}
+          getPilot={getPilot}
+          selectedPilotId={selectedPilotId}
+          onSelect={setSelectedPilotId}
+          onAnnounce={setAnnouncement}
+          favoritePilotIds={favoriteIds}
+          onToggleFavorite={toggleFavorite}
+          showLap={false}
+          hint="As diferenças durante a corrida são estimadas."
+        />
+      </Card>
+
       <Card className={styles.controls}>
         <p className={styles.controlHint}>
           {reduceMotion && !state.playing && !state.ended
             ? 'Animação pausada pela preferência de movimento reduzido. Toque em Retomar para ver a corrida.'
-            : 'Você controla a simulação: pause, reinicie, mude a velocidade ou vá direto ao final.'}
+            : 'Controles da demonstração: pause, reinicie ou vá direto ao final para simular o fim da etapa.'}
         </p>
         <div className={styles.controlActions}>
           <button type="button" className={styles.controlButton} onClick={() => player.restart()}>
@@ -140,15 +209,6 @@ function LiveStage({
             {state.playing ? 'Pausar' : state.ended ? 'Rever' : 'Retomar'}
           </button>
         </div>
-        <div className={styles.speedRow}>
-          <span className={styles.speedLabel}>Velocidade</span>
-          <SegmentedControl
-            label="Velocidade da simulação"
-            options={SPEED_OPTIONS}
-            value={String(state.speed)}
-            onChange={(value) => player.setSpeed(Number(value) as ReplaySpeed)}
-          />
-        </div>
         {!state.ended && (
           <Button
             variant="ghost"
@@ -161,31 +221,6 @@ function LiveStage({
         )}
       </Card>
 
-      <Card flush aria-labelledby="spectator-live-standings">
-        <div className={styles.leaderboardHeading}>
-          <div>
-            <p className={styles.eyebrow}>
-              Etapa {race.round} · {race.name}
-            </p>
-            <h2 id="spectator-live-standings">Posições na pista</h2>
-          </div>
-          <span className={styles.lapCount}>
-            Volta {snapshot.leaderLap}/{replay.totalLaps}
-          </span>
-        </div>
-        <Leaderboard
-          player={player}
-          totalLaps={replay.totalLaps}
-          getPilot={getPilot}
-          selectedPilotId={selectedPilotId}
-          onSelect={setSelectedPilotId}
-          onAnnounce={setAnnouncement}
-        />
-      </Card>
-
-      <p className={styles.footnote}>
-        Toque em um piloto para localizar o carro na pista. A cor identifica a equipe; nome e número ajudam a confirmar.
-      </p>
       <div className="sr-only" role="status" aria-live="polite">
         {announcement}
       </div>

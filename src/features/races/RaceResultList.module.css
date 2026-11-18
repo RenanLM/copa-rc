@@ -42,16 +42,25 @@
   text-align: center;
 }
 
+/* Medalha: número escuro sobre a cor da medalha (igual ao pódio), legível nos dois temas. */
+.podium1,
+.podium2,
+.podium3 {
+  padding: 4px 0;
+  border-radius: 8px;
+  color: var(--medal-ink);
+}
+
 .podium1 {
-  color: #f6c945;
+  background: var(--gold);
 }
 
 .podium2 {
-  color: #c9d1dc;
+  background: var(--silver);
 }
 
 .podium3 {
-  color: #d9945a;
+  background: var(--bronze);
 }
 
 .score {
@@ -69,7 +78,7 @@
 }
 
 .ptsScoring {
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 .ptsZero {
@@ -117,14 +126,14 @@
 }
 
 .grid .data {
-  color: var(--data);
+  color: var(--data-text);
 }
 
 .fastest {
   display: inline-flex;
   align-items: center;
   gap: 3px;
-  color: var(--data);
+  color: var(--data-text);
   font-size: var(--fs-xs);
   font-weight: 700;
 }
