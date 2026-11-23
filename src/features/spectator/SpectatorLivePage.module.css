@@ -18,7 +18,7 @@
 .demoHead {
   justify-content: flex-start;
   margin-bottom: var(--sp-2);
-  color: var(--data);
+  color: var(--data-text);
 }
 
 .nextTitle {

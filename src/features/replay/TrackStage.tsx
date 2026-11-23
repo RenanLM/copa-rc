@@ -19,6 +19,8 @@ interface TrackStageProps {
   focusPilotId?: PilotId;
   /** Piloto escolhido na classificação. */
   selectedPilotId?: PilotId | null;
+  /** Pilotos que a pessoa acompanha: ficam com anel e número, como o piloto em foco. */
+  favoriteIds?: readonly PilotId[];
   label: string;
   /** Faixa acima da pista (cronômetro e volta). */
   header?: ReactNode;
@@ -34,7 +36,17 @@ const CAR_WIDTH = 8;
  * Pista em vista superior. Os carros são movidos direto no DOM a cada quadro
  * (sem re-renderizar o React), o que mantém a animação fluida com 12 carros.
  */
-export function TrackStage({ player, track, cars, focusPilotId, selectedPilotId, label, header, children }: TrackStageProps) {
+export function TrackStage({
+  player,
+  track,
+  cars,
+  focusPilotId,
+  selectedPilotId,
+  favoriteIds = [],
+  label,
+  header,
+  children,
+}: TrackStageProps) {
   const uid = useId();
   const reduceMotion = useReducedMotion();
   const path = useMemo(() => buildTrackPath(track?.layout), [track]);
@@ -61,7 +73,8 @@ export function TrackStage({ player, track, cars, focusPilotId, selectedPilotId,
 
   const start = path.pointAt(0);
   const startDeg = (start.angle * 180) / Math.PI;
-  const highlighted = new Set([focusPilotId, selectedPilotId].filter(Boolean) as PilotId[]);
+  const favorites = new Set(favoriteIds);
+  const highlighted = new Set([focusPilotId, selectedPilotId, ...favorites].filter(Boolean) as PilotId[]);
   // Destacados por último: ficam por cima dos demais.
   const ordered = [...cars].sort((a, b) => Number(highlighted.has(a.pilotId)) - Number(highlighted.has(b.pilotId)));
 
@@ -107,6 +120,7 @@ export function TrackStage({ player, track, cars, focusPilotId, selectedPilotId,
           {ordered.map((car) => {
             const isFocus = car.pilotId === focusPilotId;
             const isSelected = car.pilotId === selectedPilotId;
+            const isFavorite = favorites.has(car.pilotId);
             return (
               <g
                 key={car.pilotId}
@@ -116,8 +130,11 @@ export function TrackStage({ player, track, cars, focusPilotId, selectedPilotId,
                   else carNodes.current.delete(car.pilotId);
                 }}
               >
-                {(isFocus || isSelected) && (
-                  <circle r="12" className={isFocus ? styles.focusRing : styles.selectRing} />
+                {(isFocus || isSelected || isFavorite) && (
+                  <circle
+                    r="12"
+                    className={isFocus ? styles.focusRing : isSelected ? styles.selectRing : styles.favoriteRing}
+                  />
                 )}
                 <rect
                   x={-CAR_LENGTH / 2}
@@ -139,6 +156,8 @@ export function TrackStage({ player, track, cars, focusPilotId, selectedPilotId,
             .filter((car) => highlighted.has(car.pilotId))
             .map((car) => {
               const isFocus = car.pilotId === focusPilotId;
+              const isSelected = car.pilotId === selectedPilotId;
+              const tagFill = isFocus ? 'var(--accent)' : isSelected ? 'var(--text)' : 'var(--nav-active)';
               return (
                 <g
                   key={`tag-${car.pilotId}`}
@@ -149,8 +168,9 @@ export function TrackStage({ player, track, cars, focusPilotId, selectedPilotId,
                   }}
                   aria-hidden="true"
                 >
-                  <rect x="-11" y="-8" width="22" height="16" rx="8" fill={isFocus ? 'var(--accent)' : 'var(--text)'} />
-                  <text fill="var(--accent-ink)">{car.number}</text>
+                  <rect x="-11" y="-8" width="22" height="16" rx="8" fill={tagFill} />
+                  {/* número em tinta escura sobre o destaque; em branco (fundo do cartão) sobre as demais cores */}
+                  <text fill={isFocus ? 'var(--accent-ink)' : 'var(--surface)'}>{car.number}</text>
                 </g>
               );
             })}

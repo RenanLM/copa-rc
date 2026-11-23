@@ -1,10 +1,14 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { ReplayModel, ReplaySnapshot } from '@/domain';
-import { ReplayPlayer, type PlayerState } from './ReplayPlayer';
+import { ReplayPlayer, type PlayerState, type ReplaySpeed } from './ReplayPlayer';
 
-/** Cria o relógio de um replay e o encerra ao sair da tela ou trocar de etapa. */
-export function useReplayPlayer(model: ReplayModel | null): ReplayPlayer | null {
-  const player = useMemo(() => (model ? new ReplayPlayer(model) : null), [model]);
+/**
+ * Cria o relógio de um replay e o encerra ao sair da tela ou trocar de etapa.
+ * `speed` é só a velocidade inicial; sem ela vale a padrão do replay.
+ */
+export function useReplayPlayer(model: ReplayModel | null, speed?: ReplaySpeed): ReplayPlayer | null {
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- a velocidade inicial só vale na criação do relógio
+  const player = useMemo(() => (model ? new ReplayPlayer(model, speed) : null), [model]);
   useEffect(() => () => player?.destroy(), [player]);
   return player;
 }

@@ -17,8 +17,40 @@
   box-shadow: inset 3px 0 0 var(--accent);
 }
 
+/* Piloto que a pessoa escolheu acompanhar: faixa e fundo na cor de navegação (texto "preferido" na linha). */
+.favorite {
+  background: color-mix(in srgb, var(--nav-active) 8%, var(--surface));
+  box-shadow: inset 4px 0 0 var(--nav-active);
+}
+
 .selected {
   box-shadow: inset 3px 0 0 var(--text);
+}
+
+.favorite.selected {
+  box-shadow:
+    inset 4px 0 0 var(--nav-active),
+    inset 8px 0 0 var(--text);
+}
+
+.line {
+  display: flex;
+  align-items: stretch;
+}
+
+.star {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: var(--touch);
+  min-height: var(--touch);
+  border: 0;
+  background: transparent;
+  color: var(--text-2);
+}
+
+.star[aria-pressed='true'] {
+  color: var(--nav-active);
 }
 
 .row {
@@ -26,7 +58,8 @@
   grid-template-columns: 26px 20px 1fr auto;
   align-items: center;
   gap: var(--sp-2);
-  width: 100%;
+  flex: 1 1 auto;
+  min-width: 0;
   min-height: 52px;
   padding: var(--sp-2) var(--sp-3);
   border: 0;

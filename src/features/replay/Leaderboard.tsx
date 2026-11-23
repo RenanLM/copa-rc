@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { motion } from 'motion/react';
-import { ArrowDown, ArrowUp } from 'lucide-react';
+import { ArrowDown, ArrowUp, Star } from 'lucide-react';
 import { PilotLine } from '@/components/PilotLine';
 import type { GapToLeader, Pilot, PilotId, Team } from '@/domain';
 import { formatGap, formatOrdinal } from '@/lib/format';
@@ -15,12 +15,20 @@ interface LeaderboardProps {
   focusPilotId?: PilotId;
   selectedPilotId: PilotId | null;
   onSelect: (pilotId: PilotId | null) => void;
-  /** Texto para leitores de tela quando o piloto em foco muda de posição. */
+  /** Texto para leitores de tela quando o piloto em foco (ou um preferido) muda de posição. */
   onAnnounce: (message: string) => void;
+  /** Pilotos que a pessoa escolheu acompanhar. Só aparecem com `onToggleFavorite`. */
+  favoritePilotIds?: readonly PilotId[];
+  /** Mostra a estrela de "acompanhar" em cada linha. Sem isto, a lista é só de leitura e seleção. */
+  onToggleFavorite?: (pilotId: PilotId) => void;
+  /** Mostra "Volta n/N" em cada linha. Padrão: sim (replay); a tela ao vivo mostra a volta só no cabeçalho. */
+  showLap?: boolean;
+  /** Texto de ajuda abaixo da lista. `null` esconde; sem valor, usa o texto padrão do replay. */
+  hint?: ReactNode;
 }
 
 /** Durante a corrida a diferença é estimada: uma casa decimal, para não sugerir precisão. */
-function liveGap(gap: GapToLeader, finished: boolean): string {
+export function liveGap(gap: GapToLeader, finished: boolean): string {
   if (gap.kind === 'time' && !finished) return `+${(gap.ms / 1000).toFixed(1)} s`;
   return formatGap(gap);
 }
@@ -38,6 +46,10 @@ export function Leaderboard({
   selectedPilotId,
   onSelect,
   onAnnounce,
+  favoritePilotIds = [],
+  onToggleFavorite,
+  showLap = true,
+  hint,
 }: LeaderboardProps) {
   const snapshot = useSnapshot(player, 4);
   const state = usePlayerState(player, 4);
@@ -72,15 +84,18 @@ export function Leaderboard({
         }
       }
     }
-    // Anuncia (só) as mudanças do piloto em foco.
-    if (focusPilotId) {
-      const was = before.get(focusPilotId);
-      const now = next.get(focusPilotId);
+    // Anuncia (só) as mudanças do piloto em foco e dos preferidos, numa mensagem única.
+    const watched = [...new Set([focusPilotId, ...favoritePilotIds].filter(Boolean) as PilotId[])];
+    const messages: string[] = [];
+    for (const id of watched) {
+      const was = before.get(id);
+      const now = next.get(id);
       if (!jumped && was !== undefined && now !== undefined && was !== now) {
-        const name = getPilot(focusPilotId)?.pilot.name ?? 'Piloto';
-        onAnnounce(`${name} ${now < was ? 'subiu' : 'caiu'} para ${formatOrdinal(now)} lugar`);
+        const name = getPilot(id)?.pilot.name ?? 'Piloto';
+        messages.push(`${name} ${now < was ? 'subiu' : 'caiu'} para ${formatOrdinal(now)} lugar`);
       }
     }
+    if (messages.length > 0) onAnnounce(messages.join('. '));
     previous.current = next;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [snapshot]);
@@ -107,43 +122,65 @@ export function Leaderboard({
           const { pilot, team } = info;
           const isFocus = car.pilotId === focusPilotId;
           const isSelected = car.pilotId === selectedPilotId;
+          const isFavorite = favoritePilotIds.includes(car.pilotId);
           const change = changes[car.pilotId];
+          const lapText = car.retired ? 'Fora da prova' : car.finished ? 'Terminou' : showLap ? `Volta ${car.lap}/${totalLaps}` : null;
           return (
             <motion.li
               key={car.pilotId}
               layout="position"
               transition={{ type: 'spring', stiffness: 520, damping: 42 }}
-              className={`${styles.item} ${isFocus ? styles.highlight : ''} ${isSelected ? styles.selected : ''}`}
+              className={`${styles.item} ${isFocus ? styles.highlight : ''} ${isFavorite ? styles.favorite : ''} ${isSelected ? styles.selected : ''}`}
             >
-              <button
-                type="button"
-                className={styles.row}
-                aria-pressed={isSelected}
-                aria-label={`${formatOrdinal(car.position)}: ${pilot.name}, ${team.name}. Toque para destacar na pista.`}
-                onClick={() => onSelect(isSelected ? null : car.pilotId)}
-              >
-                <span className={`${styles.position} num`} aria-hidden="true">
-                  {car.position}
-                </span>
-                <span className={`${styles.change} ${change === 'down' ? styles.changeDown : ''}`} aria-hidden="true">
-                  {change === 'up' && <ArrowUp size={16} />}
-                  {change === 'down' && <ArrowDown size={16} />}
-                </span>
-                <PilotLine pilot={pilot} team={team} sub={isFocus ? `${team.name} · você` : undefined} />
-                <span className={styles.info} aria-hidden="true">
-                  <span className={`${styles.gap} ${car.retired ? styles.out : ''} num`}>
-                    {car.position === 1 ? (car.finished ? 'Vencedor' : 'Líder') : liveGap(car.gap, car.finished)}
+              <div className={styles.line}>
+                <button
+                  type="button"
+                  className={styles.row}
+                  aria-pressed={isSelected}
+                  aria-label={`${formatOrdinal(car.position)}: ${pilot.name}, ${team.name}.${isFavorite ? ' Piloto que você acompanha.' : ''} Toque para destacar na pista.`}
+                  onClick={() => onSelect(isSelected ? null : car.pilotId)}
+                >
+                  <span className={`${styles.position} num`} aria-hidden="true">
+                    {car.position}
                   </span>
-                  <span className={`${styles.lap} num`}>
-                    {car.retired ? 'Fora da prova' : car.finished ? 'Terminou' : `Volta ${car.lap}/${totalLaps}`}
+                  <span className={`${styles.change} ${change === 'down' ? styles.changeDown : ''}`} aria-hidden="true">
+                    {change === 'up' && <ArrowUp size={16} />}
+                    {change === 'down' && <ArrowDown size={16} />}
                   </span>
-                </span>
-              </button>
+                  <PilotLine
+                    pilot={pilot}
+                    team={team}
+                    // "Preferido" vem primeiro: em tela estreita é o fim do texto que é cortado
+                    sub={isFocus ? `${team.name} · você` : isFavorite ? `Preferido · ${team.name}` : undefined}
+                  />
+                  <span className={styles.info} aria-hidden="true">
+                    <span className={`${styles.gap} ${car.retired ? styles.out : ''} num`}>
+                      {car.position === 1 ? (car.finished ? 'Vencedor' : 'Líder') : liveGap(car.gap, car.finished)}
+                    </span>
+                    {lapText && <span className={`${styles.lap} num`}>{lapText}</span>}
+                  </span>
+                </button>
+                {onToggleFavorite && (
+                  <button
+                    type="button"
+                    className={styles.star}
+                    aria-pressed={isFavorite}
+                    aria-label={`Acompanhar ${pilot.name}`}
+                    onClick={() => onToggleFavorite(car.pilotId)}
+                  >
+                    <Star size={22} fill={isFavorite ? 'currentColor' : 'none'} aria-hidden="true" />
+                  </button>
+                )}
+              </div>
             </motion.li>
           );
         })}
       </ol>
-      <p className={styles.hint}>Toque em um piloto para destacá-lo na pista. As diferenças durante a corrida são estimadas.</p>
+      {hint !== null && (
+        <p className={styles.hint}>
+          {hint ?? 'Toque em um piloto para destacá-lo na pista. As diferenças durante a corrida são estimadas.'}
+        </p>
+      )}
     </>
   );
 }

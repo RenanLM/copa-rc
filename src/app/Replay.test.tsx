@@ -100,6 +100,15 @@ describe('Race Replay', () => {
     expect(first).toHaveTextContent('Vencedor');
   });
 
+  it('o replay do piloto não muda: sem estrela de preferidos e com a volta em cada linha', async () => {
+    open('#/piloto/corridas/etapa-3/replay');
+    await screen.findByRole('heading', { name: 'GP Cajueiro' }, ready);
+    const live = screen.getByRole('list', { name: 'Classificação ao vivo' });
+    expect(within(live).queryByRole('button', { name: /^Acompanhar / })).not.toBeInTheDocument();
+    expect(within(live).getAllByText(/^Volta \d+\/\d+$/)).toHaveLength(12);
+    expect(screen.getByText(/Toque em um piloto para destacá-lo na pista/)).toBeInTheDocument();
+  });
+
   it('permite destacar um piloto na pista pela classificação', async () => {
     open('#/piloto/corridas/etapa-3/replay');
     await screen.findByRole('heading', { name: 'GP Cajueiro' }, ready);

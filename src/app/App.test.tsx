@@ -90,6 +90,12 @@ describe('aplicativo (interface)', () => {
     expect(screen.getAllByText(/GP Turbo Norte/)).toHaveLength(2);
     expect(screen.getByRole('img', { name: /Simulação da etapa 4, GP Turbo Norte/ })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'Posições na pista' })).toBeInTheDocument();
+    // etapa em andamento não se acelera: só controles de demonstração, sem velocidade
+    expect(screen.getByText(/Controles da demonstração/)).toBeInTheDocument();
+    expect(screen.queryByRole('radiogroup', { name: /Velocidade/ })).not.toBeInTheDocument();
+    expect(screen.queryByText('Velocidade')).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Reiniciar' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Ir para o final/ })).toBeInTheDocument();
     // a simulação começa sozinha; a pessoa pode pausar e retomar
     fireEvent.click(await screen.findByRole('button', { name: 'Pausar simulação' }));
     fireEvent.click(await screen.findByRole('button', { name: 'Retomar simulação' }));
