@@ -35,6 +35,23 @@ describe('aplicativo (interface)', () => {
     expect(screen.getByText(/Etapa 4 · GP Turbo Norte/)).toBeInTheDocument();
   });
 
+  it('agrupa a home do piloto por status, telemetria e acesso progressivo', async () => {
+    open('#/piloto');
+    await screen.findByRole('region', { name: /Resumo de Lucas Ferreira/ }, ready);
+
+    expect(screen.getByRole('region', { name: 'Status no Campeonato' })).toBeInTheDocument();
+    expect(screen.getByRole('region', { name: 'Sua última entrada na pista' })).toBeInTheDocument();
+    expect(screen.getByRole('region', { name: 'Acesso rápido e evolução' })).toBeInTheDocument();
+    expect(screen.getByText('Última prova oficial · Etapa 3')).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Abrir resultado completo/ })).toHaveAttribute(
+      'href',
+      '#/piloto/corridas/etapa-3',
+    );
+    const disclosures = document.querySelectorAll('details');
+    expect(disclosures.length).toBeGreaterThanOrEqual(3);
+    disclosures.forEach((disclosure) => expect(disclosure).not.toHaveAttribute('open'));
+  });
+
   it('mostra a navegação do piloto e navega para a classificação com destaque', async () => {
     open('#/piloto');
     await screen.findByRole('region', { name: /Resumo de Lucas Ferreira/ }, ready);

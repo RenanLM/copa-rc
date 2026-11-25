@@ -79,6 +79,13 @@
   margin-top: var(--sp-4);
 }
 
+.embedded.embedded {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  padding: 0;
+}
+
 .actions {
   display: flex;
   flex-wrap: wrap;

@@ -10,14 +10,18 @@ interface LastRaceCardProps {
   lastRace: LastRaceSummary;
   trackName: string;
   detailPath: string;
+  embedded?: boolean;
 }
 
-export function LastRaceCard({ lastRace, trackName, detailPath }: LastRaceCardProps) {
+export function LastRaceCard({ lastRace, trackName, detailPath, embedded = false }: LastRaceCardProps) {
   const { race, status } = lastRace;
   const abandoned = status === 'dnf';
 
   return (
-    <Card aria-labelledby="last-race-title">
+    <Card
+      aria-labelledby="last-race-title"
+      className={embedded ? styles.embedded : undefined}
+    >
       <div className={styles.kicker}>
         <h2 className={styles.kickerTitle} id="last-race-title">
           Última etapa
