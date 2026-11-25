@@ -60,6 +60,7 @@ export function PilotHeatTelemetry({ model, pilotId, raceId }: PilotHeatTelemetr
   );
   const latestIsFastest =
     latestPilotBest !== null && latestPilotBest === latestFieldFastest;
+  const latestIsLeader = latest.entry.position === 1;
   const latestAverageLap =
     latest.entry.lapTimesMs.length > 0
       ? latest.entry.lapTimesMs.reduce((sum, lap) => sum + lap, 0) / latest.entry.lapTimesMs.length
@@ -136,7 +137,9 @@ export function PilotHeatTelemetry({ model, pilotId, raceId }: PilotHeatTelemetr
             setIsOpen(true);
           }}
         >
-          Comparar com o líder e ver telemetria
+          {latestIsLeader
+            ? 'Ver telemetria e vantagem para o 2º colocado'
+            : 'Comparar com o líder e ver telemetria'}
         </Button>
       </Card>
 
