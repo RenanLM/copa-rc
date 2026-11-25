@@ -33,8 +33,13 @@ Documento vivo: cada fase acrescenta as decisões relevantes. Siglas: **B&S** = 
 | A última bateria registrada fica no topo do painel do piloto e também aparece no detalhe da etapa, com número de voltas, melhor volta e ritmo médio. | Início, Corridas | B&S Carga de trabalho; N1 Visibilidade do estado; N6 Reconhecimento |
 | A telemetria detalhada e a comparação da melhor volta com o líder da bateria ficam em um painel inferior, acessível por um botão explícito. | Início, Corridas | B&S Condução; N7 Flexibilidade e eficiência; divulgação progressiva |
 | As voltas podem ser trocadas no painel sem filtros avançados ou ações destrutivas; todos os controles novos têm área de toque de pelo menos 44 px. | Telemetria | B&S Gestão de erros; B&S Adaptabilidade |
-| A melhor volta da bateria usa verde e o ritmo médio usa amarelo com texto escuro; a cor é acompanhada por rótulos textuais. | Telemetria | B&S Significado dos códigos; N1 |
+| A melhor volta da bateria usa verde; o ritmo médio usa azul neutro, sem implicar alerta ou avaliação negativa. | Telemetria | B&S Significado dos códigos; N1 |
+| O botão da telemetria adapta o texto à colocação do piloto: líder vê a vantagem para o 2º colocado; os demais veem a comparação com o líder. | Telemetria | B&S Condução; compatibilidade com o contexto da tarefa |
+| A lista de voltas não cria uma área de rolagem própria; todo o conteúdo do painel inferior rola como uma superfície contínua em dispositivos móveis. | Telemetria | B&S Gestão de erros; N3 Controle e liberdade |
 | Não se exibe carga física ou alerta de bateria crítica: os dados atuais só registram voltas, não tensão nem percentual de carga. | Telemetria | N2 Correspondência com o mundo real; honestidade da informação |
+| No modo escuro do piloto, textos secundários ficam mais claros e os menores rótulos aumentam para facilitar a leitura rápida no paddock. O ajuste é restrito ao perfil do Lucas. | Todas as telas do piloto | B&S Condução; legibilidade sob luz solar; acessibilidade |
+| A página inicial é dividida em três blocos explícitos: status no campeonato, telemetria da última entrada na pista e acesso rápido/evolução. Isso agrupa informações por contexto e reduz a varredura entre cartões sem relação direta. | Início | B&S Condução; B&S Carga de trabalho |
+| Resultados detalhados, números acumulados, agenda e gráfico de evolução ficam recolhidos em disclosures nativos. Os atalhos para resultado, próxima etapa e análise permanecem visíveis no bloco final. | Início | N8 Design minimalista; N7 Flexibilidade e eficiência; divulgação progressiva |
 
 ## Fase 2 — Replay e desempenho
 
