@@ -139,7 +139,7 @@
 .axisText {
   fill: var(--text-2);
   font-family: var(--font-body);
-  font-size: 10px;
+  font-size: var(--pilot-small-text, 10px);
 }
 
 .valueText {

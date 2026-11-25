@@ -37,7 +37,7 @@ export function AppShell({ profile }: { profile: ProfileDefinition }) {
   return (
     <ProfileProvider profile={profile}>
       <ScenarioProvider profile={profile}>
-      <div className={styles.app}>
+      <div className={`${styles.app} ${profile.id === 'pilot' ? styles.pilotProfile : ''}`}>
         <a
           className={styles.skip}
           href="#conteudo"

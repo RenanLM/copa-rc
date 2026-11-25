@@ -10,6 +10,14 @@
   overflow: hidden;
 }
 
+:global(:root[data-theme='dark']) .pilotProfile {
+  --text-2: #c4cfdd;
+  --text-3: #aebaca;
+  --fs-xs: 0.8125rem;
+  --fs-sm: 0.875rem;
+  --pilot-small-text: var(--fs-xs);
+}
+
 /* Em telas largas, o aplicativo aparece como um aparelho centralizado. */
 @media (min-width: 520px) {
   .app {

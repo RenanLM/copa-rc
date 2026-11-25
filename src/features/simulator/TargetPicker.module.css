@@ -63,7 +63,7 @@
   border-radius: 999px;
   background: var(--text);
   color: var(--bg);
-  font-size: 0.5625rem;
+  font-size: var(--pilot-small-text, 0.5625rem);
   font-weight: 800;
   letter-spacing: 0.06em;
   text-transform: uppercase;

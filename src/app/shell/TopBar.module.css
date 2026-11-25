@@ -41,7 +41,7 @@
   border-radius: 999px;
   border: 1px solid color-mix(in srgb, var(--data) 50%, transparent);
   color: var(--data-text);
-  font-size: 0.6875rem;
+  font-size: var(--pilot-small-text, 0.6875rem);
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
